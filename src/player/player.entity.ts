@@ -1,11 +1,7 @@
-import { Entity, PrimaryGeneratedColumn } from "typeorm";
-
-
-
+import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Player {
-
-    @PrimaryGeneratedColumn()
-    id: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 }
