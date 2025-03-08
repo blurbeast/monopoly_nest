@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('player')
 export class Player {
-  @PrimaryGeneratedColumn('identity')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({
     unique: true,
@@ -19,9 +19,9 @@ export class Player {
   @Column({ unique: true, type: 'varchar', length: 42 })
   walletAddress: string;
 
-  @Column()
-  currentGameId: string;
+  @Column({ nullable: true, type: 'bigint' })
+  currentGameId: number;
 
-  @Column({ name: 'player_joined_at', type: 'timestamp' })
+  @Column({ name: 'player_joined_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

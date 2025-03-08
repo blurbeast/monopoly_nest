@@ -1,21 +1,26 @@
+import { Numeric } from 'ethers';
 import { Player } from 'src/player/player.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum GameStatus {
-    PENDING,
-    ACTIVE,
-    ENDED,
+    PENDING, // 0
+    ACTIVE, // 1
+    ENDED, // 2
+}
+
+class Position {
+    player: string;
+    spot: number;
 }
 
 @Entity()
 export class Game {
-    @PrimaryGeneratedColumn()
-    id: string;
+    @PrimaryGeneratedColumn('increment')
+    id: number;
 
-    @Column({ unique: true, type: 'char', length: 4 })
+    @Column({ unique: true, type: 'varchar', length: 4 })
     gameRoomId: string;
 
-    @Column({ name: 'game_players' })
     @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
     players: Player[];
 
@@ -23,10 +28,13 @@ export class Game {
     bankContractAddress: string;
 
     @Column({ type: 'timestamp', name: 'created_time' })
-    createAt: Date;
+    createdAt: Date;
 
     @Column()
     currentTurn: string;
+
+    @Column({ type: 'jsonb', name: 'player_position', nullable: true })
+    playerPositions: Position[];
 
     @Column({
         enum: GameStatus,
