@@ -4,8 +4,9 @@ import { PlayerModule } from 'src/player/player.module';
 import { BlockchainController } from './blockchain.controller';
 
 @Module({
-  imports: [PlayerModule],
-  providers: [BlockchainService],
-  controllers: [BlockchainController],
+    // imports: [PlayerModule],
+    providers: [BlockchainService],
+    controllers: [BlockchainController],
+    exports: [BlockchainService]
 })
-export class BlockchainModule {}
+export class BlockchainModule { }

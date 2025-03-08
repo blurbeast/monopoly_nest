@@ -1,6 +1,5 @@
-import { Numeric } from 'ethers';
 import { Player } from 'src/player/player.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum GameStatus {
     PENDING, // 0
@@ -27,7 +26,8 @@ export class Game {
     @Column({ unique: true, length: 42, type: 'varchar' })
     bankContractAddress: string;
 
-    @Column({ type: 'timestamp', name: 'created_time' })
+    // @Column({ type: 'timestamp', name: 'created_time', default: () => 'CURRENT_TIMESTAMP' })
+    @CreateDateColumn({ type: 'timestamp', name: 'created_time' })
     createdAt: Date;
 
     @Column()

@@ -17,9 +17,9 @@ export class Player {
   smartAccountAddress: string;
 
   @Column({ unique: true, type: 'varchar', length: 42 })
-  walletAddress: string;
+  playerAddress: string;
 
-  @Column({ nullable: true, type: 'bigint' })
+  @Column({ nullable: true, type: 'int' })
   currentGameId: number;
 
   @Column({ name: 'player_joined_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
