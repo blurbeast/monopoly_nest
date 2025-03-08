@@ -1,5 +1,5 @@
 import { Player } from 'src/player/player.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Game {
@@ -10,6 +10,7 @@ export class Game {
     gameRoomId: string;
 
     @Column({ name: 'game_players' })
+    @OneToMany(() => Player, (player) => player.walletAddress, { cascade: true })
     players: Player[]
 
     @Column({ unique: true, length: 42, type: 'varchar' })
