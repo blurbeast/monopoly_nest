@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as PlayerAbi from './abis/PlayerAbi.json';
+import * as EntrypointAbi from './abis/EntryPointAbi.json';
+import * as SmartAccountAbi from './abis/SmartAccountAbi.json';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -27,17 +29,33 @@ export class BlockchainService {
             this.provider
         );
         this.playerContract = new ethers.Contract(process.env.PLAYER_CONTRACT_ADDRESS as string, PlayerAbi, this.defaultWallet);
-        this.entryPointContract = new ethers.Contract(process.env.ENTRYPOINT_CONTRACT_ADDRESS as string, '');
+        this.entryPointContract = new ethers.Contract(process.env.ENTRYPOINT_CONTRACT_ADDRESS as string, EntrypointAbi, this.defaultWallet);
     }
 
 
-    async registerPlayer(): Promise<string> {
-
+    async registerPlayer(owner: string): Promise<string> {
         try {
 
-            return "";
+            if (!owner.startsWith('0x') && !(owner.length === 42)) {
+                throw new Error(`invalid address provided ${owner}`);
+            }
+            // call on the factory to create instance so as to deploy the contract 
+            const factory = new ethers.ContractFactory(
+                SmartAccountAbi.abi,
+                SmartAccountAbi.bytecode,
+                this.defaultWallet
+            );
+
+            // the smart account takes two arguement upon deploying
+            const smartAccount = await factory.deploy(owner, this.cntryPointContractAddress);
+
+            // the receipt of the transaction and the event if any 
+            smartAccount.waitForDeployment();
+
+            // this returns address of the deployed smart account 
+            return smartAccount.target as string;
         } catch (error) {
-            throw new Error(error);
+            throw new Error(error.shortMessage);
         }
     }
 }
