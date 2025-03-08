@@ -1,6 +1,12 @@
 import { Player } from 'src/player/player.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+enum GameStatus {
+    PENDING,
+    ACTIVE,
+    ENDED
+}
+
 @Entity()
 export class Game {
     @PrimaryGeneratedColumn()
@@ -10,7 +16,7 @@ export class Game {
     gameRoomId: string;
 
     @Column({ name: 'game_players' })
-    @OneToMany(() => Player, (player) => player.walletAddress, { cascade: true })
+    @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
     players: Player[]
 
     @Column({ unique: true, length: 42, type: 'varchar' })
@@ -22,6 +28,9 @@ export class Game {
     @Column()
     currentTurn: string;
 
-    @Column({ type: 'timestamp', name: 'ended_time', })
+    @Column({ enum: GameStatus, name: 'game_status', enumName: 'status', type: 'enum', default: GameStatus.PENDING, })
+    status: GameStatus;
+
+    @Column({ type: 'timestamp', name: 'ended_time', nullable: true })
     endedAt: Date;
 }

@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+
 @Entity('player')
 export class Player {
   @PrimaryGeneratedColumn('identity')
@@ -13,5 +14,11 @@ export class Player {
 
   @Column({ unique: true, type: 'varchar', length: 42 })
   walletAddress: string;
+
+  @Column()
+  currentGameId: string;
+
+  @Column({ name: "player_joined_at", type: 'timestamp' })
+  createdAt: Date;
 
 }
