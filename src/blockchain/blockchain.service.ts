@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
-import * as dotenv from 'dotenv';
 import * as PlayerAbi from './abis/PlayerAbi.json';
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 
 @Injectable()
 export class BlockchainService {
 
-    private readonly playerContractAddress: ethers.Contract;
-    private readonly entryPointContractAddress: ethers.Contract;
+    private readonly playerContract: ethers.Contract;
+    private readonly entryPointContract: ethers.Contract;
     private readonly defaultWallet: ethers.Wallet;
     private readonly provider: ethers.JsonRpcProvider;
 
@@ -24,7 +24,17 @@ export class BlockchainService {
             process.env.WALLET_KEY as string,
             this.provider
         );
+        this.playerContract = new ethers.Contract(process.env.PLAYER_CONTRACT_ADDRESS as string, PlayerAbi, this.defaultWallet);
+    }
 
-        this.playerContractAddress = new ethers.Contract(process.env.PLAYER_CONTRACT_ADDRESS as string, PlayerAbi, this.defaultWallet);
+
+    async registerPlayer(): Promise<string> {
+
+        try {
+
+            return "";
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 }
