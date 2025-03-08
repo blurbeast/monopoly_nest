@@ -12,19 +12,22 @@ export class BlockchainService {
     private readonly entryPointContract: ethers.Contract;
     private readonly defaultWallet: ethers.Wallet;
     private readonly provider: ethers.JsonRpcProvider;
+    private readonly cntryPointContractAddress: string;
 
     constructor() {
         if (!process.env.WALLET_KEY ||
-            !process.env.PROVIDER_URL) {
+            !process.env.PROVIDER_URL ||
+            !process.env.ENTRYPOINT_CONTRACT_ADDRESS) {
             throw new Error("could not read from the environment variables");
         }
-
+        this.cntryPointContractAddress = process.env.ENTRYPOINT_CONTRACT_ADDRESS;
         this.provider = new ethers.JsonRpcProvider(process.env.PROVIDER_URL as string);
         this.defaultWallet = new ethers.Wallet(
             process.env.WALLET_KEY as string,
             this.provider
         );
         this.playerContract = new ethers.Contract(process.env.PLAYER_CONTRACT_ADDRESS as string, PlayerAbi, this.defaultWallet);
+        this.entryPointContract = new ethers.Contract(process.env.ENTRYPOINT_CONTRACT_ADDRESS as string, '');
     }
 
 
