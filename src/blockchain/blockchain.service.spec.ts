@@ -16,6 +16,7 @@ describe('BlockchainService', () => {
     const smartAccountAddress = await service.deploySmartAccount('0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28');
 
     expect(smartAccountAddress.startsWith('0x')).toBe(true);
+    expect(smartAccountAddress.length).toBe(42);
   });
 
 
