@@ -32,8 +32,7 @@ export class BlockchainService {
         this.entryPointContract = new ethers.Contract(process.env.ENTRYPOINT_CONTRACT_ADDRESS as string, EntrypointAbi, this.defaultWallet);
     }
 
-
-    async registerPlayer(owner: string): Promise<string> {
+    async deploySmartAccount(owner: string): Promise<string> {
         try {
 
             if (!owner.startsWith('0x') && !(owner.length === 42)) {
