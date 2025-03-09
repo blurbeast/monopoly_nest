@@ -1,4 +1,742 @@
 {
-    "abi": [],
-    "bytecode": "0x"
+    "abi": [
+        {
+            "type": "constructor",
+            "inputs": [
+                {
+                    "name": "_owner",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "_entryPoint",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "receive",
+            "stateMutability": "payable"
+        },
+        {
+            "type": "function",
+            "name": "entryPoint",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "execute",
+            "inputs": [
+                {
+                    "name": "_target",
+                    "type": "address",
+                    "internalType": "address"
+                },
+                {
+                    "name": "value",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                },
+                {
+                    "name": "data",
+                    "type": "bytes",
+                    "internalType": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "bool",
+                    "internalType": "bool"
+                },
+                {
+                    "name": "",
+                    "type": "bytes",
+                    "internalType": "bytes"
+                }
+            ],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "function",
+            "name": "nonce",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "owner",
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "address",
+                    "internalType": "address"
+                }
+            ],
+            "stateMutability": "view"
+        },
+        {
+            "type": "function",
+            "name": "validateUserOp",
+            "inputs": [
+                {
+                    "name": "userOp",
+                    "type": "tuple",
+                    "internalType": "struct PackedUserOperation",
+                    "components": [
+                        {
+                            "name": "sender",
+                            "type": "address",
+                            "internalType": "address"
+                        },
+                        {
+                            "name": "nonce",
+                            "type": "uint256",
+                            "internalType": "uint256"
+                        },
+                        {
+                            "name": "initCode",
+                            "type": "bytes",
+                            "internalType": "bytes"
+                        },
+                        {
+                            "name": "callData",
+                            "type": "bytes",
+                            "internalType": "bytes"
+                        },
+                        {
+                            "name": "accountGasLimits",
+                            "type": "bytes32",
+                            "internalType": "bytes32"
+                        },
+                        {
+                            "name": "preVerificationGas",
+                            "type": "uint256",
+                            "internalType": "uint256"
+                        },
+                        {
+                            "name": "gasFees",
+                            "type": "bytes32",
+                            "internalType": "bytes32"
+                        },
+                        {
+                            "name": "paymasterAndData",
+                            "type": "bytes",
+                            "internalType": "bytes"
+                        },
+                        {
+                            "name": "signature",
+                            "type": "bytes",
+                            "internalType": "bytes"
+                        }
+                    ]
+                },
+                {
+                    "name": "userOpHash",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                },
+                {
+                    "name": "missingAccountFunds",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "validationData",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ],
+            "stateMutability": "nonpayable"
+        },
+        {
+            "type": "error",
+            "name": "ECDSAInvalidSignature",
+            "inputs": []
+        },
+        {
+            "type": "error",
+            "name": "ECDSAInvalidSignatureLength",
+            "inputs": [
+                {
+                    "name": "length",
+                    "type": "uint256",
+                    "internalType": "uint256"
+                }
+            ]
+        },
+        {
+            "type": "error",
+            "name": "ECDSAInvalidSignatureS",
+            "inputs": [
+                {
+                    "name": "s",
+                    "type": "bytes32",
+                    "internalType": "bytes32"
+                }
+            ]
+        }
+    ],
+    "bytecode": {
+        "object": "0x608060405234801561000f575f5ffd5b506040516108fa3803806108fa83398101604081905261002e91610195565b6001600160a01b0382166100895760405162461bcd60e51b815260206004820152601460248201527f6f776e65722063616e6e6f74206265207a65726f00000000000000000000000060448201526064015b60405180910390fd5b5f546001600160a01b03163b156100e25760405162461bcd60e51b815260206004820152601b60248201527f4f776e65723a2063616e6e6f74206265206120636f6e747261637400000000006044820152606401610080565b5f816001600160a01b03163b1161014a5760405162461bcd60e51b815260206004820152602660248201527f456e747279506f696e743a206d757374206265206120636f6e7472616374206160448201526564647265737360d01b6064820152608401610080565b5f80546001600160a01b039384166001600160a01b031991821617909155600180549290931691161790556101c6565b80516001600160a01b0381168114610190575f5ffd5b919050565b5f5f604083850312156101a6575f5ffd5b6101af8361017a565b91506101bd6020840161017a565b90509250929050565b610727806101d35f395ff3fe60806040526004361061004c575f3560e01c806319822f7c146100575780638da5cb5b14610089578063affed0e0146100bf578063b0d691fe146100d4578063b61d27f6146100f3575f5ffd5b3661005357005b5f5ffd5b348015610062575f5ffd5b506100766100713660046104df565b610120565b6040519081526020015b60405180910390f35b348015610094575f5ffd5b505f546100a7906001600160a01b031681565b6040516001600160a01b039091168152602001610080565b3480156100ca575f5ffd5b5061007660025481565b3480156100df575f5ffd5b506001546100a7906001600160a01b031681565b3480156100fe575f5ffd5b5061011261010d366004610542565b61022f565b60405161008092919061061b565b5f6002548460200135146101705760405162461bcd60e51b8152602060048201526012602482015271696e76616c69642075736572206e6f6e636560701b60448201526064015b60405180910390fd5b7f19457468657265756d205369676e6564204d6573736167653a0a3332000000005f908152601c849052603c8120906101ec6101b0610100880188610659565b8080601f0160208091040260200160405190810160405280939291908181526020018383808284375f9201919091525086939250506102ea9050565b5f549091506001600160a01b0380831691161461020e57600192505050610228565b60028054905f61021d836106a3565b91905055505f925050505b9392505050565b5f60605f5f866001600160a01b0316868660405161024d91906106c7565b5f6040518083038185875af1925050503d805f8114610287576040519150601f19603f3d011682016040523d82523d5f602084013e61028c565b606091505b5091509150816102de5760405162461bcd60e51b815260206004820152601960248201527f636f756c64206e6f7420636f6d706c65746520616374696f6e000000000000006044820152606401610167565b90969095509350505050565b5f5f5f5f6102f88686610312565b925092509250610308828261035b565b5090949350505050565b5f5f5f8351604103610349576020840151604085015160608601515f1a61033b88828585610417565b955095509550505050610354565b505081515f91506002905b9250925092565b5f82600381111561036e5761036e6106dd565b03610377575050565b600182600381111561038b5761038b6106dd565b036103a95760405163f645eedf60e01b815260040160405180910390fd5b60028260038111156103bd576103bd6106dd565b036103de5760405163fce698f760e01b815260048101829052602401610167565b60038260038111156103f2576103f26106dd565b03610413576040516335e2f38360e21b815260048101829052602401610167565b5050565b5f80807f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a084111561045057505f915060039050826104d5565b604080515f808252602082018084528a905260ff891692820192909252606081018790526080810186905260019060a0016020604051602081039080840390855afa1580156104a1573d5f5f3e3d5ffd5b5050604051601f1901519150506001600160a01b0381166104cc57505f9250600191508290506104d5565b92505f91508190505b9450945094915050565b5f5f5f606084860312156104f1575f5ffd5b833567ffffffffffffffff811115610507575f5ffd5b84016101208187031215610519575f5ffd5b95602085013595506040909401359392505050565b634e487b7160e01b5f52604160045260245ffd5b5f5f5f60608486031215610554575f5ffd5b83356001600160a01b038116811461056a575f5ffd5b925060208401359150604084013567ffffffffffffffff81111561058c575f5ffd5b8401601f8101861361059c575f5ffd5b803567ffffffffffffffff8111156105b6576105b661052e565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156105e5576105e561052e565b6040528181528282016020018810156105fc575f5ffd5b816020840160208301375f602083830101528093505050509250925092565b8215158152604060208201525f82518060408401528060208501606085015e5f606082850101526060601f19601f8301168401019150509392505050565b5f5f8335601e1984360301811261066e575f5ffd5b83018035915067ffffffffffffffff821115610688575f5ffd5b60200191503681900382131561069c575f5ffd5b9250929050565b5f600182016106c057634e487b7160e01b5f52601160045260245ffd5b5060010190565b5f82518060208501845e5f920191825250919050565b634e487b7160e01b5f52602160045260245ffdfea2646970667358221220200b2bf903c68e51d55bcbab7a4c9deb44dce2cbfd008d1879e2e04ceeb413bc64736f6c634300081c0033",
+        "sourceMap": "466:1328:60:-:0;;;620:337;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;687:20:60;;679:53;;;;-1:-1:-1;;;679:53:60;;696:2:72;679:53:60;;;678:21:72;735:2;715:18;;;708:30;774:22;754:18;;;747:50;814:18;;679:53:60;;;;;;;;;750:5;;-1:-1:-1;;;;;750:5:60;:17;:22;742:62;;;;-1:-1:-1;;;742:62:60;;1045:2:72;742:62:60;;;1027:21:72;1084:2;1064:18;;;1057:30;1123:29;1103:18;;;1096:57;1170:18;;742:62:60;843:351:72;742:62:60;848:1;822:11;-1:-1:-1;;;;;822:23:60;;:27;814:78;;;;-1:-1:-1;;;814:78:60;;1401:2:72;814:78:60;;;1383:21:72;1440:2;1420:18;;;1413:30;1479:34;1459:18;;;1452:62;-1:-1:-1;;;1530:18:72;;;1523:36;1576:19;;814:78:60;1199:402:72;814:78:60;902:5;:14;;-1:-1:-1;;;;;902:14:60;;;-1:-1:-1;;;;;;902:14:60;;;;;;;;926:24;;;;;;;;;;;466:1328;;14:177:72;93:13;;-1:-1:-1;;;;;135:31:72;;125:42;;115:70;;181:1;178;171:12;115:70;14:177;;;:::o;196:293::-;275:6;283;336:2;324:9;315:7;311:23;307:32;304:52;;;352:1;349;342:12;304:52;375:40;405:9;375:40;:::i;:::-;365:50;;434:49;479:2;468:9;464:18;434:49;:::i;:::-;424:59;;196:293;;;;;:::o;1199:402::-;466:1328:60;;;;;;",
+        "linkReferences": {}
+    },
+    "deployedBytecode": {
+        "object": "0x60806040526004361061004c575f3560e01c806319822f7c146100575780638da5cb5b14610089578063affed0e0146100bf578063b0d691fe146100d4578063b61d27f6146100f3575f5ffd5b3661005357005b5f5ffd5b348015610062575f5ffd5b506100766100713660046104df565b610120565b6040519081526020015b60405180910390f35b348015610094575f5ffd5b505f546100a7906001600160a01b031681565b6040516001600160a01b039091168152602001610080565b3480156100ca575f5ffd5b5061007660025481565b3480156100df575f5ffd5b506001546100a7906001600160a01b031681565b3480156100fe575f5ffd5b5061011261010d366004610542565b61022f565b60405161008092919061061b565b5f6002548460200135146101705760405162461bcd60e51b8152602060048201526012602482015271696e76616c69642075736572206e6f6e636560701b60448201526064015b60405180910390fd5b7f19457468657265756d205369676e6564204d6573736167653a0a3332000000005f908152601c849052603c8120906101ec6101b0610100880188610659565b8080601f0160208091040260200160405190810160405280939291908181526020018383808284375f9201919091525086939250506102ea9050565b5f549091506001600160a01b0380831691161461020e57600192505050610228565b60028054905f61021d836106a3565b91905055505f925050505b9392505050565b5f60605f5f866001600160a01b0316868660405161024d91906106c7565b5f6040518083038185875af1925050503d805f8114610287576040519150601f19603f3d011682016040523d82523d5f602084013e61028c565b606091505b5091509150816102de5760405162461bcd60e51b815260206004820152601960248201527f636f756c64206e6f7420636f6d706c65746520616374696f6e000000000000006044820152606401610167565b90969095509350505050565b5f5f5f5f6102f88686610312565b925092509250610308828261035b565b5090949350505050565b5f5f5f8351604103610349576020840151604085015160608601515f1a61033b88828585610417565b955095509550505050610354565b505081515f91506002905b9250925092565b5f82600381111561036e5761036e6106dd565b03610377575050565b600182600381111561038b5761038b6106dd565b036103a95760405163f645eedf60e01b815260040160405180910390fd5b60028260038111156103bd576103bd6106dd565b036103de5760405163fce698f760e01b815260048101829052602401610167565b60038260038111156103f2576103f26106dd565b03610413576040516335e2f38360e21b815260048101829052602401610167565b5050565b5f80807f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a084111561045057505f915060039050826104d5565b604080515f808252602082018084528a905260ff891692820192909252606081018790526080810186905260019060a0016020604051602081039080840390855afa1580156104a1573d5f5f3e3d5ffd5b5050604051601f1901519150506001600160a01b0381166104cc57505f9250600191508290506104d5565b92505f91508190505b9450945094915050565b5f5f5f606084860312156104f1575f5ffd5b833567ffffffffffffffff811115610507575f5ffd5b84016101208187031215610519575f5ffd5b95602085013595506040909401359392505050565b634e487b7160e01b5f52604160045260245ffd5b5f5f5f60608486031215610554575f5ffd5b83356001600160a01b038116811461056a575f5ffd5b925060208401359150604084013567ffffffffffffffff81111561058c575f5ffd5b8401601f8101861361059c575f5ffd5b803567ffffffffffffffff8111156105b6576105b661052e565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156105e5576105e561052e565b6040528181528282016020018810156105fc575f5ffd5b816020840160208301375f602083830101528093505050509250925092565b8215158152604060208201525f82518060408401528060208501606085015e5f606082850101526060601f19601f8301168401019150509392505050565b5f5f8335601e1984360301811261066e575f5ffd5b83018035915067ffffffffffffffff821115610688575f5ffd5b60200191503681900382131561069c575f5ffd5b9250929050565b5f600182016106c057634e487b7160e01b5f52601160045260245ffd5b5060010190565b5f82518060208501845e5f920191825250919050565b634e487b7160e01b5f52602160045260245ffdfea2646970667358221220200b2bf903c68e51d55bcbab7a4c9deb44dce2cbfd008d1879e2e04ceeb413bc64736f6c634300081c0033",
+        "sourceMap": "466:1328:60:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;963:504;;;;;;;;;;-1:-1:-1;963:504:60;;;;;:::i;:::-;;:::i;:::-;;;744:25:72;;;732:2;717:18;963:504:60;;;;;;;;536:20;;;;;;;;;;-1:-1:-1;536:20:60;;;;-1:-1:-1;;;;;536:20:60;;;;;;-1:-1:-1;;;;;944:32:72;;;926:51;;914:2;899:18;536:20:60;780:203:72;593:20:60;;;;;;;;;;;;;;;;562:25;;;;;;;;;;-1:-1:-1;562:25:60;;;;-1:-1:-1;;;;;562:25:60;;;1473:284;;;;;;;;;;-1:-1:-1;1473:284:60;;;;;:::i;:::-;;:::i;:::-;;;;;;;;:::i;963:504::-;1107:22;1169:5;;1153:6;:12;;;:21;1145:52;;;;-1:-1:-1;;;1145:52:60;;3067:2:72;1145:52:60;;;3049:21:72;3106:2;3086:18;;;3079:30;-1:-1:-1;;;3125:18:72;;;3118:48;3183:18;;1145:52:60;;;;;;;;;1401:34:47;1207:18:60;1388:48:47;;;1497:4;1490:25;;;1595:4;1579:21;;;1315:36:60;1334:16;;;;;;:::i;:::-;1315:36;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;1315:10:60;;:36;-1:-1:-1;;1315:18:60;:36;-1:-1:-1;1315:36:60:i;:::-;1385:5;;1289:62;;-1:-1:-1;;;;;;1366:24:60;;;1385:5;;1366:24;1362:63;;1413:1;1406:8;;;;;;1362:63;1434:5;:7;;;:5;:7;;;:::i;:::-;;;;;;1459:1;1452:8;;;;963:504;;;;;;:::o;1473:284::-;1559:4;1565:12;1590;1604:19;1627:7;-1:-1:-1;;;;;1627:12:60;1647:5;1654:4;1627:32;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1589:70;;;;1678:7;1670:45;;;;-1:-1:-1;;;1670:45:60;;4483:2:72;1670:45:60;;;4465:21:72;4522:2;4502:18;;;4495:30;4561:27;4541:18;;;4534:55;4606:18;;1670:45:60;4281:349:72;1670:45:60;1734:7;;;;-1:-1:-1;1473:284:60;-1:-1:-1;;;;1473:284:60:o;3714:255:46:-;3792:7;3812:17;3831:18;3851:16;3871:27;3882:4;3888:9;3871:10;:27::i;:::-;3811:87;;;;;;3908:28;3920:5;3927:8;3908:11;:28::i;:::-;-1:-1:-1;3953:9:46;;3714:255;-1:-1:-1;;;;3714:255:46:o;2129:778::-;2232:17;2251:16;2269:14;2299:9;:16;2319:2;2299:22;2295:606;;2604:4;2589:20;;2583:27;2653:4;2638:20;;2632:27;2710:4;2695:20;;2689:27;2337:9;2681:36;2751:25;2762:4;2681:36;2583:27;2632;2751:10;:25::i;:::-;2744:32;;;;;;;;;;;2295:606;-1:-1:-1;;2872:16:46;;2823:1;;-1:-1:-1;2827:35:46;;2295:606;2129:778;;;;;:::o;7280:532::-;7375:20;7366:5;:29;;;;;;;;:::i;:::-;;7362:444;;7280:532;;:::o;7362:444::-;7471:29;7462:5;:38;;;;;;;;:::i;:::-;;7458:348;;7523:23;;-1:-1:-1;;;7523:23:46;;;;;;;;;;;7458:348;7576:35;7567:5;:44;;;;;;;;:::i;:::-;;7563:243;;7634:46;;-1:-1:-1;;;7634:46:46;;;;;744:25:72;;;717:18;;7634:46:46;598:177:72;7563:243:46;7710:30;7701:5;:39;;;;;;;;:::i;:::-;;7697:109;;7763:32;;-1:-1:-1;;;7763:32:46;;;;;744:25:72;;;717:18;;7763:32:46;598:177:72;7697:109:46;7280:532;;:::o;5203:1551::-;5329:17;;;6283:66;6270:79;;6266:164;;;-1:-1:-1;6381:1:46;;-1:-1:-1;6385:30:46;;-1:-1:-1;6417:1:46;6365:54;;6266:164;6541:24;;;6524:14;6541:24;;;;;;;;;5176:25:72;;;5249:4;5237:17;;5217:18;;;5210:45;;;;5271:18;;;5264:34;;;5314:18;;;5307:34;;;6541:24:46;;5148:19:72;;6541:24:46;;;;;;;;;;;;;;;;;;;;;;;;;;;-1:-1:-1;;6541:24:46;;-1:-1:-1;;6541:24:46;;;-1:-1:-1;;;;;;;6579:20:46;;6575:113;;-1:-1:-1;6631:1:46;;-1:-1:-1;6635:29:46;;-1:-1:-1;6631:1:46;;-1:-1:-1;6615:62:46;;6575:113;6706:6;-1:-1:-1;6714:20:46;;-1:-1:-1;6714:20:46;;-1:-1:-1;5203:1551:46;;;;;;;;;:::o;14:579:72:-;128:6;136;144;197:2;185:9;176:7;172:23;168:32;165:52;;;213:1;210;203:12;165:52;253:9;240:23;286:18;278:6;275:30;272:50;;;318:1;315;308:12;272:50;341:22;;397:3;379:16;;;375:26;372:46;;;414:1;411;404:12;372:46;437:2;486;471:18;;458:32;;-1:-1:-1;559:2:72;544:18;;;531:32;;14:579;-1:-1:-1;;;14:579:72:o;988:127::-;1049:10;1044:3;1040:20;1037:1;1030:31;1080:4;1077:1;1070:15;1104:4;1101:1;1094:15;1120:1238;1206:6;1214;1222;1275:2;1263:9;1254:7;1250:23;1246:32;1243:52;;;1291:1;1288;1281:12;1243:52;1317:23;;-1:-1:-1;;;;;1369:31:72;;1359:42;;1349:70;;1415:1;1412;1405:12;1349:70;1438:5;-1:-1:-1;1516:2:72;1501:18;;1488:32;;-1:-1:-1;1597:2:72;1582:18;;1569:32;1624:18;1613:30;;1610:50;;;1656:1;1653;1646:12;1610:50;1679:22;;1732:4;1724:13;;1720:27;-1:-1:-1;1710:55:72;;1761:1;1758;1751:12;1710:55;1801:2;1788:16;1827:18;1819:6;1816:30;1813:56;;;1849:18;;:::i;:::-;1898:2;1892:9;1990:2;1952:17;;-1:-1:-1;;1948:31:72;;;1981:2;1944:40;1940:54;1928:67;;2025:18;2010:34;;2046:22;;;2007:62;2004:88;;;2072:18;;:::i;:::-;2108:2;2101:22;2132;;;2173:15;;;2190:2;2169:24;2166:37;-1:-1:-1;2163:57:72;;;2216:1;2213;2206:12;2163:57;2272:6;2267:2;2263;2259:11;2254:2;2246:6;2242:15;2229:50;2325:1;2320:2;2311:6;2303;2299:19;2295:28;2288:39;2346:6;2336:16;;;;;1120:1238;;;;;:::o;2363:497::-;2546:6;2539:14;2532:22;2521:9;2514:41;2591:2;2586;2575:9;2571:18;2564:30;2495:4;2623:6;2617:13;2666:6;2661:2;2650:9;2646:18;2639:34;2725:6;2720:2;2712:6;2708:15;2703:2;2692:9;2688:18;2682:50;2781:1;2776:2;2767:6;2756:9;2752:22;2748:31;2741:42;2851:2;2844;2840:7;2835:2;2827:6;2823:15;2819:29;2808:9;2804:45;2800:54;2792:62;;;2363:497;;;;;:::o;3212:521::-;3289:4;3295:6;3355:11;3342:25;3449:2;3445:7;3434:8;3418:14;3414:29;3410:43;3390:18;3386:68;3376:96;;3468:1;3465;3458:12;3376:96;3495:33;;3547:20;;;-1:-1:-1;3590:18:72;3579:30;;3576:50;;;3622:1;3619;3612:12;3576:50;3655:4;3643:17;;-1:-1:-1;3686:14:72;3682:27;;;3672:38;;3669:58;;;3723:1;3720;3713:12;3669:58;3212:521;;;;;:::o;3738:232::-;3777:3;3798:17;;;3795:140;;3857:10;3852:3;3848:20;3845:1;3838:31;3892:4;3889:1;3882:15;3920:4;3917:1;3910:15;3795:140;-1:-1:-1;3962:1:72;3951:13;;3738:232::o;3975:301::-;4104:3;4142:6;4136:13;4188:6;4181:4;4173:6;4169:17;4164:3;4158:37;4250:1;4214:16;;4239:13;;;-1:-1:-1;4214:16:72;3975:301;-1:-1:-1;3975:301:72:o;4635:127::-;4696:10;4691:3;4687:20;4684:1;4677:31;4727:4;4724:1;4717:15;4751:4;4748:1;4741:15",
+        "linkReferences": {}
+    },
+    "methodIdentifiers": {
+        "entryPoint()": "b0d691fe",
+        "execute(address,uint256,bytes)": "b61d27f6",
+        "nonce()": "affed0e0",
+        "owner()": "8da5cb5b",
+        "validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes),bytes32,uint256)": "19822f7c"
+    },
+    "rawMetadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_entryPoint\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"ECDSAInvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"ECDSAInvalidSignatureLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"ECDSAInvalidSignatureS\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"entryPoint\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"execute\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"nonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"initCode\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"accountGasLimits\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"preVerificationGas\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"gasFees\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"paymasterAndData\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"struct PackedUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"missingAccountFunds\",\"type\":\"uint256\"}],\"name\":\"validateUserOp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"validationData\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}],\"devdoc\":{\"errors\":{\"ECDSAInvalidSignature()\":[{\"details\":\"The signature derives the `address(0)`.\"}],\"ECDSAInvalidSignatureLength(uint256)\":[{\"details\":\"The signature has an invalid length.\"}],\"ECDSAInvalidSignatureS(bytes32)\":[{\"details\":\"The signature has an S value that is in the upper half order.\"}]},\"kind\":\"dev\",\"methods\":{\"validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes),bytes32,uint256)\":{\"details\":\"Must validate caller is the entryPoint.      Must validate the signature and nonce\",\"params\":{\"missingAccountFunds\":\"- Missing funds on the account's deposit in the entrypoint.                              This is the minimum amount to transfer to the sender(entryPoint) to be                              able to make the call. The excess is left as a deposit in the entrypoint                              for future calls. Can be withdrawn anytime using \\\"entryPoint.withdrawTo()\\\".                              In case there is a paymaster in the request (or the current deposit is high                              enough), this value will be zero.\",\"userOp\":\"- The operation that is about to be executed.\",\"userOpHash\":\"- Hash of the user's request data. can be used as the basis for signature.\"},\"returns\":{\"validationData\":\"      - Packaged ValidationData structure. use `_packValidationData` and                              `_unpackValidationData` to encode and decode.                              <20-byte> sigAuthorizer - 0 for valid signature, 1 to mark signature failure,                                 otherwise, an address of an \\\"authorizer\\\" contract.                              <6-byte> validUntil - Last timestamp this operation is valid. 0 for \\\"indefinite\\\"                              <6-byte> validAfter - First timestamp this operation is valid                                                    If an account doesn't use time-range, it is enough to                                                    return SIG_VALIDATION_FAILED value (1) for signature failure.                              Note that the validation code cannot use block.timestamp (or block.number) directly.\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes),bytes32,uint256)\":{\"notice\":\"Validate user's signature and nonce the entryPoint will make the call to the recipient only if this validation call returns successfully. signature failure should be reported by returning SIG_VALIDATION_FAILED (1). This allows making a \\\"simulation call\\\" without a valid signature Other failures (e.g. nonce mismatch, or invalid signature format) should still revert to signal failure.\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/account_abstraction/SmartAccount.sol\":\"SmartAccount\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@account-abstraction/=lib/account-abstraction/\",\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":account-abstraction/=lib/account-abstraction/contracts/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\"]},\"sources\":{\"lib/account-abstraction/contracts/interfaces/IAccount.sol\":{\"keccak256\":\"0x38710bec0cb20ff4ceef46a80475b5bdabc27b7efd2687fd473db68332f61b78\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://dea7a723e1ef852e8764e69914a345d2e8bc5e13facfc9d5c29d791cb4ab0020\",\"dweb:/ipfs/QmU8dYgyF4DBJXFqjwLAtnE3q8q259ChfoEk9a6wyhHzEP\"]},\"lib/account-abstraction/contracts/interfaces/PackedUserOperation.sol\":{\"keccak256\":\"0x1129b46381db68eddbc5cb49e50664667b66b03c480453858e7b25eabe444359\",\"license\":\"GPL-3.0\",\"urls\":[\"bzz-raw://499a948aba60480dba6e25c763b8d918f1c246eb7a3302e04f493e080f3295be\",\"dweb:/ipfs/QmeRhhswf4NACcBKam2PyjpTP2ddSm648kah5kkQJsvwz3\"]},\"lib/forge-std/src/Base.sol\":{\"keccak256\":\"0x4ff1a785311017d1eedb1b4737956fa383067ad34eb439abfec1d989754dde1c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f553622969b9fdb930246704a4c10dfaee6b1a4468c142fa7eb9dc292a438224\",\"dweb:/ipfs/QmcxqHnqdQsMVtgsfH9VNLmZ3g7GhgNagfq7yvNCDcCHFK\"]},\"lib/forge-std/src/StdAssertions.sol\":{\"keccak256\":\"0x4584f551c3a875c26423c1e50a77179bc2f9c9c1ee6d0f0c6be0f89ca5ee8270\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ef118876a862b60ba8a6612b8b3f3a6c226e11a0071a2e9695f021586d1bfdbe\",\"dweb:/ipfs/QmXd2vD91PkvoFWasFkgbDi89PctmgsHVxGvGNyhjmRK2b\"]},\"lib/forge-std/src/StdChains.sol\":{\"keccak256\":\"0x7dd11ac4db798fa196e00a0cfa288ce984acac881f1f34de03fe3187deed58de\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2c15fb03d5545e2d8d3948661596410edec5ec278a73988914b14a05d0d54557\",\"dweb:/ipfs/QmWGjkLgp4wSrTrFxF8cmhghaXQp5VyXYQvWE1DUTPL4rG\"]},\"lib/forge-std/src/StdCheats.sol\":{\"keccak256\":\"0x28473c688050ed5cfdf6a47bfd59cdc7209e6a3eab8b438eb92055ea4066a49b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2d7e6391ced7256389f496fa35962d4ecdd6a066c5a54bdbef58abe6287c732b\",\"dweb:/ipfs/QmTuTqyapx9XraMX3mUjNjs3YHzBiQSfAQ38can96WWohM\"]},\"lib/forge-std/src/StdError.sol\":{\"keccak256\":\"0xbf477b11a42d7611696956546bcfaa29317d1166bf65e402344599c05943fc77\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bc2e117d1135e030862b96a6526a43feb38d396cc79857f1fb696d4eff0e5fd6\",\"dweb:/ipfs/QmdSuQ5RrQudTLsNmWXGEeVJX8gR5U9XPm6m4dwwuQnJrj\"]},\"lib/forge-std/src/StdInvariant.sol\":{\"keccak256\":\"0x4dab3021edfa9511bbdd80c48f060ef62eaf457f99eaf841f561fc2557d9a08d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://07668628673174cf8f27f8f4e1f862bab775013ec247eb34f698c5005f229391\",\"dweb:/ipfs/QmPJsiiYwmCZXMsHmQv5tg8VF3CAhNdat7WnKLTWZZH2v5\"]},\"lib/forge-std/src/StdJson.sol\":{\"keccak256\":\"0xbc0132abe1c2accc2867c0f03667afffdf92f3e95a581bb03c9557eaa38ea500\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://eb6fab37dc73c219cfbb7b4f4998bcf7677ca5397a867e850f40232192073974\",\"dweb:/ipfs/QmUHsbVdp9SKmgek7ZfPcLTKrpZFXpqaqt4sVejzxGEQL3\"]},\"lib/forge-std/src/StdMath.sol\":{\"keccak256\":\"0xd90ad4fd8aeaeb8929964e686e769fdedd5eded3fc3815df194a0ab9f91a3fb2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7919b70f636c7b805223992f28ad1ad0145d6c1385b5931a3589aface5fe6c92\",\"dweb:/ipfs/QmY7FRaULwoGgFteF8GawjQJRfasNgpWnU2aiMsFrYpuTC\"]},\"lib/forge-std/src/StdStorage.sol\":{\"keccak256\":\"0xb91ab24383a5872b894fc93325eef1add6cbbf981628f18e860068bf88bb7dcc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2651e33b9ac8fc5803ed0a43078c1bf4fa90a0b0347aafd95776b02daccdcc57\",\"dweb:/ipfs/QmbdRyPuGJdZgnCuMnp7c1WsBo1Spf7j1KMmws1Z5rd4BQ\"]},\"lib/forge-std/src/StdStyle.sol\":{\"keccak256\":\"0x43e2a8a9b9c2574dabe74f11adf6f782df218f463540e3b5b563609fe108597d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://51363ca97404cf4128e1141428949768c31929e75e014b02c85e887fbbb4f1b8\",\"dweb:/ipfs/QmVhtbQc2fU4rRmbcfBtz34mAgG4BAZBsbna1Ca4SkoPsK\"]},\"lib/forge-std/src/StdToml.sol\":{\"keccak256\":\"0x58a72c765ed3f7ff6b105509689658795b8a3739b8931772a497155878381861\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b4a3746f4fabaeb980bd77d9e091d3904ee38a6c0e191bfa8ba6874c6f8558a3\",\"dweb:/ipfs/QmUfFDMEn461FgGEXt5HicyGD54sc28sLaQ9JRWDMBKed8\"]},\"lib/forge-std/src/StdUtils.sol\":{\"keccak256\":\"0x4a5853bb9688c4e1c65626036cddd8ea2af84ef1046b704ddc3782d84a892410\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://09c1024e6aac9657312fcfcf5c3dee62c22edf9f74a1065e6924c4ec710ecafa\",\"dweb:/ipfs/QmRNURoTUkd6DiZnf8yY8o3stJpVQBifopdSpQgP9RhvRr\"]},\"lib/forge-std/src/Test.sol\":{\"keccak256\":\"0x3b4bb409a156dee9ce261458117fe9f81080ca844a8a26c07c857c46d155effe\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5792c69fe24bdc063a14e08fe68275007fdb1e5e7e343840a77938cb7e95a64e\",\"dweb:/ipfs/QmcAMhaurUwzhytJFYix4vRNeZeV8g27b8LnV3t7dvYtiK\"]},\"lib/forge-std/src/Vm.sol\":{\"keccak256\":\"0xd7a115278b44e47816b2a9a5cea14b3c3f574182e289b29f98d5e2d0911ccae6\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://18c07088a04c9669c5eb6f2050bb944daba75603a97c1a03752d594f587cf1a4\",\"dweb:/ipfs/QmbzjH83hquj5uodqahA5YRW972PDnhtVu6cEu9YjAfVHH\"]},\"lib/forge-std/src/console.sol\":{\"keccak256\":\"0x4bbf47eb762cef93729d6ef15e78789957147039b113e5d4df48e3d3fd16d0f5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://af9e3a7c3d82fb5b10b57ca4d1a82f2acbef80c077f6f6ef0cc0187c7bfd9f57\",\"dweb:/ipfs/QmR9VzmnBDJpgiDP6CHT6truehukF9HpYvuP6kRiJbDwPP\"]},\"lib/forge-std/src/console2.sol\":{\"keccak256\":\"0x3b8fe79f48f065a4e4d35362171304a33784c3a90febae5f2787805a438de12f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://61de63af08803549299e68b6e6e88d40f3c5afac450e4ee0a228c66a61ba003d\",\"dweb:/ipfs/QmWVoQ5rrVxnczD4ZZoPbD4PC9Z3uExJtzjD4awTqd14MZ\"]},\"lib/forge-std/src/interfaces/IERC165.sol\":{\"keccak256\":\"0x414b2861b1acbf816ccb7346d3f16cf6c1e002e9e5e40d2f1f26fa5ddc2ea600\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://698352fb240868ea8f1d1fe389993035eeab930f10d06934f80ccfb2b6ccbfbc\",\"dweb:/ipfs/QmT6WLHAgXxFhh12kWym895oTzXid1326iZiwT3pyfggoT\"]},\"lib/forge-std/src/interfaces/IERC20.sol\":{\"keccak256\":\"0x4cab887298790f908c27de107e4e2907ca5413aee482ef776f8d2f353c5ef947\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb715e0c4a2bdbe432bb624501506041f06e878e0b72675aebba30ad2c2b72e7\",\"dweb:/ipfs/QmWhhLSvkxS2NrukJJHqFY8gDVE5r9rD4PfHvR24pwdKv9\"]},\"lib/forge-std/src/interfaces/IERC721.sol\":{\"keccak256\":\"0xf069262a264fdb69f8f37a10d2df7374649e9ba73f8414c9c8a3b51184625f15\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://924a41ca82a68ffbd503a5faf2f76d13e9938f10501a71094716f12bb64b4b7f\",\"dweb:/ipfs/QmdWnqfKc5ZGhmxNPTde4zrFchnv9Yk9MpCMb2rdhXE5gm\"]},\"lib/forge-std/src/interfaces/IMulticall3.sol\":{\"keccak256\":\"0x7aac1389150499a922d1f9ef5749c908cef127cb2075b92fa17e9cb611263d0a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d95ebb7c7c463e08ebc12dab639945752fb2480acfc6e86da32f72732a7fd0c0\",\"dweb:/ipfs/QmNXK8P8oPWwajsQHvAHw3JPyQidPLCGQN3hWu1Lk6PBL2\"]},\"lib/forge-std/src/mocks/MockERC20.sol\":{\"keccak256\":\"0xadbdfc6639edec00ba94bb1133a0fd8de31ccafe45c2ef5df9b3ca61b60b559b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bc766f01bccf669abac8cc7b2096cc1352a66471ca3772ae61b1801dedc4ed4f\",\"dweb:/ipfs/QmNigaPj1LYkP7Z5xr4ijkUxr2K66fDGeoifG3WoM9ruyw\"]},\"lib/forge-std/src/mocks/MockERC721.sol\":{\"keccak256\":\"0xbfbb755bb379f58b97699f7cda0e9a2b9113daaa072e41b280a5ce6a3bff44c9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5ae0c31d29db14d6a0e9b62d33d550feb307f48a6f45068901a013321f337f87\",\"dweb:/ipfs/QmX25DVXW6XZDvRm6SNBGCWrZQ6oNhdq5CmgtVocvsUdwv\"]},\"lib/forge-std/src/safeconsole.sol\":{\"keccak256\":\"0xbef9786cb49d3eade757bad87568c49c8c8f35721f0193c95ffb055d9e466e11\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3bafd2b0b2d28068d329f95ea8a1fbce3719c257fcb863fc01abcbafd8d531ab\",\"dweb:/ipfs/QmUeaFjKWTVDBsHVfSob4mwt6A5hTnKDz22HaUXeZhypa3\"]},\"lib/openzeppelin-contracts/contracts/utils/Panic.sol\":{\"keccak256\":\"0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c6a5ff4f9fd8649b7ee20800b7fa387d3465bd77cf20c2d1068cd5c98e1ed57a\",\"dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG\"]},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"keccak256\":\"0x22bbc2fcbd8ec97c6813aac46c0f8048b7a2d243d852111824ff5f4339e3cd84\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://233f50375cdaec3a0d275c2ac2d288c323d630cb789486a0a4913b9df8b0495f\",\"dweb:/ipfs/QmdMnFGFEffGZXAXx3NbwFGi8894gGsN9nxApKQTGrXVhL\"]},\"lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol\":{\"keccak256\":\"0x69f54c02b7d81d505910ec198c11ed4c6a728418a868b906b4a0cf29946fda84\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8e25e4bdb7ae1f21d23bfee996e22736fc0ab44cfabedac82a757b1edc5623b9\",\"dweb:/ipfs/QmQdWQvB6JCP9ZMbzi8EvQ1PTETqkcTWrbcVurS7DKpa5n\"]},\"lib/openzeppelin-contracts/contracts/utils/cryptography/MessageHashUtils.sol\":{\"keccak256\":\"0x8b2e492a62de1334a04bb8cc8104750cbc6ca4b339c7808cd14da8492d4bfbd7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bc671bac8e9a810f7c51214398282e6449ef7e4dfe8e2635a0dc8516c812fef0\",\"dweb:/ipfs/QmPr1KkJ8Fq1zbdDYsCQWbHn9B7GKxWHhsgFUXtxYM7b7U\"]},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x6f61a65c733690afafb4cf528b5677e704828c8350b60b948dbc1d3bb6d7689c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://00265b985b303af62ee243e10db819fa8cf890d9f122f82f4f03f55b02f62654\",\"dweb:/ipfs/QmNneFqZn2uKK6dECxatH6aENk1EMCTETi58dGaz5NCWQe\"]},\"lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol\":{\"keccak256\":\"0x195533c86d0ef72bcc06456a4f66a9b941f38eb403739b00f21fd7c1abd1ae54\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b1d578337048cad08c1c03041cca5978eff5428aa130c781b271ad9e5566e1f8\",\"dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy\"]},\"lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol\":{\"keccak256\":\"0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://db5fbb3dddd8b7047465b62575d96231ba8a2774d37fb4737fbf23340fabbb03\",\"dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ\"]},\"src/account_abstraction/SmartAccount.sol\":{\"keccak256\":\"0x995f980e603fd787eb80c4352c5587a4ae06a624df3089cfc1bfd3a9ef10f920\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://84f010efb7bf404585be8085371e24ca2bbf735ef6c249cb5ca58a7f3e761e4c\",\"dweb:/ipfs/QmV4YY7r6xejqNEAQQVokT1aqgsC6iFR5U3v3M5BkeyL7r\"]}},\"version\":1}",
+    "metadata": {
+        "compiler": {
+            "version": "0.8.28+commit.7893614a"
+        },
+        "language": "Solidity",
+        "output": {
+            "abi": [
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_owner",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "address",
+                            "name": "_entryPoint",
+                            "type": "address"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "constructor"
+                },
+                {
+                    "inputs": [],
+                    "type": "error",
+                    "name": "ECDSAInvalidSignature"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "length",
+                            "type": "uint256"
+                        }
+                    ],
+                    "type": "error",
+                    "name": "ECDSAInvalidSignatureLength"
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "bytes32",
+                            "name": "s",
+                            "type": "bytes32"
+                        }
+                    ],
+                    "type": "error",
+                    "name": "ECDSAInvalidSignatureS"
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "entryPoint",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "address",
+                            "name": "_target",
+                            "type": "address"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "value",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "bytes",
+                            "name": "data",
+                            "type": "bytes"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "execute",
+                    "outputs": [
+                        {
+                            "internalType": "bool",
+                            "name": "",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "bytes",
+                            "name": "",
+                            "type": "bytes"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "nonce",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "",
+                            "type": "uint256"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "view",
+                    "type": "function",
+                    "name": "owner",
+                    "outputs": [
+                        {
+                            "internalType": "address",
+                            "name": "",
+                            "type": "address"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [
+                        {
+                            "internalType": "struct PackedUserOperation",
+                            "name": "userOp",
+                            "type": "tuple",
+                            "components": [
+                                {
+                                    "internalType": "address",
+                                    "name": "sender",
+                                    "type": "address"
+                                },
+                                {
+                                    "internalType": "uint256",
+                                    "name": "nonce",
+                                    "type": "uint256"
+                                },
+                                {
+                                    "internalType": "bytes",
+                                    "name": "initCode",
+                                    "type": "bytes"
+                                },
+                                {
+                                    "internalType": "bytes",
+                                    "name": "callData",
+                                    "type": "bytes"
+                                },
+                                {
+                                    "internalType": "bytes32",
+                                    "name": "accountGasLimits",
+                                    "type": "bytes32"
+                                },
+                                {
+                                    "internalType": "uint256",
+                                    "name": "preVerificationGas",
+                                    "type": "uint256"
+                                },
+                                {
+                                    "internalType": "bytes32",
+                                    "name": "gasFees",
+                                    "type": "bytes32"
+                                },
+                                {
+                                    "internalType": "bytes",
+                                    "name": "paymasterAndData",
+                                    "type": "bytes"
+                                },
+                                {
+                                    "internalType": "bytes",
+                                    "name": "signature",
+                                    "type": "bytes"
+                                }
+                            ]
+                        },
+                        {
+                            "internalType": "bytes32",
+                            "name": "userOpHash",
+                            "type": "bytes32"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "missingAccountFunds",
+                            "type": "uint256"
+                        }
+                    ],
+                    "stateMutability": "nonpayable",
+                    "type": "function",
+                    "name": "validateUserOp",
+                    "outputs": [
+                        {
+                            "internalType": "uint256",
+                            "name": "validationData",
+                            "type": "uint256"
+                        }
+                    ]
+                },
+                {
+                    "inputs": [],
+                    "stateMutability": "payable",
+                    "type": "receive"
+                }
+            ],
+            "devdoc": {
+                "kind": "dev",
+                "methods": {
+                    "validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes),bytes32,uint256)": {
+                        "details": "Must validate caller is the entryPoint.      Must validate the signature and nonce",
+                        "params": {
+                            "missingAccountFunds": "- Missing funds on the account's deposit in the entrypoint.                              This is the minimum amount to transfer to the sender(entryPoint) to be                              able to make the call. The excess is left as a deposit in the entrypoint                              for future calls. Can be withdrawn anytime using \"entryPoint.withdrawTo()\".                              In case there is a paymaster in the request (or the current deposit is high                              enough), this value will be zero.",
+                            "userOp": "- The operation that is about to be executed.",
+                            "userOpHash": "- Hash of the user's request data. can be used as the basis for signature."
+                        },
+                        "returns": {
+                            "validationData": "      - Packaged ValidationData structure. use `_packValidationData` and                              `_unpackValidationData` to encode and decode.                              <20-byte> sigAuthorizer - 0 for valid signature, 1 to mark signature failure,                                 otherwise, an address of an \"authorizer\" contract.                              <6-byte> validUntil - Last timestamp this operation is valid. 0 for \"indefinite\"                              <6-byte> validAfter - First timestamp this operation is valid                                                    If an account doesn't use time-range, it is enough to                                                    return SIG_VALIDATION_FAILED value (1) for signature failure.                              Note that the validation code cannot use block.timestamp (or block.number) directly."
+                        }
+                    }
+                },
+                "version": 1
+            },
+            "userdoc": {
+                "kind": "user",
+                "methods": {
+                    "validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes),bytes32,uint256)": {
+                        "notice": "Validate user's signature and nonce the entryPoint will make the call to the recipient only if this validation call returns successfully. signature failure should be reported by returning SIG_VALIDATION_FAILED (1). This allows making a \"simulation call\" without a valid signature Other failures (e.g. nonce mismatch, or invalid signature format) should still revert to signal failure."
+                    }
+                },
+                "version": 1
+            }
+        },
+        "settings": {
+            "remappings": [
+                "@account-abstraction/=lib/account-abstraction/",
+                "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+                "account-abstraction/=lib/account-abstraction/contracts/",
+                "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+                "forge-std/=lib/forge-std/src/",
+                "halmos-cheatcodes/=lib/openzeppelin-contracts/lib/halmos-cheatcodes/src/",
+                "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+            ],
+            "optimizer": {
+                "enabled": true,
+                "runs": 200
+            },
+            "metadata": {
+                "bytecodeHash": "ipfs"
+            },
+            "compilationTarget": {
+                "src/account_abstraction/SmartAccount.sol": "SmartAccount"
+            },
+            "evmVersion": "cancun",
+            "libraries": {}
+        },
+        "sources": {
+            "lib/account-abstraction/contracts/interfaces/IAccount.sol": {
+                "keccak256": "0x38710bec0cb20ff4ceef46a80475b5bdabc27b7efd2687fd473db68332f61b78",
+                "urls": [
+                    "bzz-raw://dea7a723e1ef852e8764e69914a345d2e8bc5e13facfc9d5c29d791cb4ab0020",
+                    "dweb:/ipfs/QmU8dYgyF4DBJXFqjwLAtnE3q8q259ChfoEk9a6wyhHzEP"
+                ],
+                "license": "GPL-3.0"
+            },
+            "lib/account-abstraction/contracts/interfaces/PackedUserOperation.sol": {
+                "keccak256": "0x1129b46381db68eddbc5cb49e50664667b66b03c480453858e7b25eabe444359",
+                "urls": [
+                    "bzz-raw://499a948aba60480dba6e25c763b8d918f1c246eb7a3302e04f493e080f3295be",
+                    "dweb:/ipfs/QmeRhhswf4NACcBKam2PyjpTP2ddSm648kah5kkQJsvwz3"
+                ],
+                "license": "GPL-3.0"
+            },
+            "lib/forge-std/src/Base.sol": {
+                "keccak256": "0x4ff1a785311017d1eedb1b4737956fa383067ad34eb439abfec1d989754dde1c",
+                "urls": [
+                    "bzz-raw://f553622969b9fdb930246704a4c10dfaee6b1a4468c142fa7eb9dc292a438224",
+                    "dweb:/ipfs/QmcxqHnqdQsMVtgsfH9VNLmZ3g7GhgNagfq7yvNCDcCHFK"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdAssertions.sol": {
+                "keccak256": "0x4584f551c3a875c26423c1e50a77179bc2f9c9c1ee6d0f0c6be0f89ca5ee8270",
+                "urls": [
+                    "bzz-raw://ef118876a862b60ba8a6612b8b3f3a6c226e11a0071a2e9695f021586d1bfdbe",
+                    "dweb:/ipfs/QmXd2vD91PkvoFWasFkgbDi89PctmgsHVxGvGNyhjmRK2b"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdChains.sol": {
+                "keccak256": "0x7dd11ac4db798fa196e00a0cfa288ce984acac881f1f34de03fe3187deed58de",
+                "urls": [
+                    "bzz-raw://2c15fb03d5545e2d8d3948661596410edec5ec278a73988914b14a05d0d54557",
+                    "dweb:/ipfs/QmWGjkLgp4wSrTrFxF8cmhghaXQp5VyXYQvWE1DUTPL4rG"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdCheats.sol": {
+                "keccak256": "0x28473c688050ed5cfdf6a47bfd59cdc7209e6a3eab8b438eb92055ea4066a49b",
+                "urls": [
+                    "bzz-raw://2d7e6391ced7256389f496fa35962d4ecdd6a066c5a54bdbef58abe6287c732b",
+                    "dweb:/ipfs/QmTuTqyapx9XraMX3mUjNjs3YHzBiQSfAQ38can96WWohM"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdError.sol": {
+                "keccak256": "0xbf477b11a42d7611696956546bcfaa29317d1166bf65e402344599c05943fc77",
+                "urls": [
+                    "bzz-raw://bc2e117d1135e030862b96a6526a43feb38d396cc79857f1fb696d4eff0e5fd6",
+                    "dweb:/ipfs/QmdSuQ5RrQudTLsNmWXGEeVJX8gR5U9XPm6m4dwwuQnJrj"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdInvariant.sol": {
+                "keccak256": "0x4dab3021edfa9511bbdd80c48f060ef62eaf457f99eaf841f561fc2557d9a08d",
+                "urls": [
+                    "bzz-raw://07668628673174cf8f27f8f4e1f862bab775013ec247eb34f698c5005f229391",
+                    "dweb:/ipfs/QmPJsiiYwmCZXMsHmQv5tg8VF3CAhNdat7WnKLTWZZH2v5"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdJson.sol": {
+                "keccak256": "0xbc0132abe1c2accc2867c0f03667afffdf92f3e95a581bb03c9557eaa38ea500",
+                "urls": [
+                    "bzz-raw://eb6fab37dc73c219cfbb7b4f4998bcf7677ca5397a867e850f40232192073974",
+                    "dweb:/ipfs/QmUHsbVdp9SKmgek7ZfPcLTKrpZFXpqaqt4sVejzxGEQL3"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdMath.sol": {
+                "keccak256": "0xd90ad4fd8aeaeb8929964e686e769fdedd5eded3fc3815df194a0ab9f91a3fb2",
+                "urls": [
+                    "bzz-raw://7919b70f636c7b805223992f28ad1ad0145d6c1385b5931a3589aface5fe6c92",
+                    "dweb:/ipfs/QmY7FRaULwoGgFteF8GawjQJRfasNgpWnU2aiMsFrYpuTC"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdStorage.sol": {
+                "keccak256": "0xb91ab24383a5872b894fc93325eef1add6cbbf981628f18e860068bf88bb7dcc",
+                "urls": [
+                    "bzz-raw://2651e33b9ac8fc5803ed0a43078c1bf4fa90a0b0347aafd95776b02daccdcc57",
+                    "dweb:/ipfs/QmbdRyPuGJdZgnCuMnp7c1WsBo1Spf7j1KMmws1Z5rd4BQ"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdStyle.sol": {
+                "keccak256": "0x43e2a8a9b9c2574dabe74f11adf6f782df218f463540e3b5b563609fe108597d",
+                "urls": [
+                    "bzz-raw://51363ca97404cf4128e1141428949768c31929e75e014b02c85e887fbbb4f1b8",
+                    "dweb:/ipfs/QmVhtbQc2fU4rRmbcfBtz34mAgG4BAZBsbna1Ca4SkoPsK"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdToml.sol": {
+                "keccak256": "0x58a72c765ed3f7ff6b105509689658795b8a3739b8931772a497155878381861",
+                "urls": [
+                    "bzz-raw://b4a3746f4fabaeb980bd77d9e091d3904ee38a6c0e191bfa8ba6874c6f8558a3",
+                    "dweb:/ipfs/QmUfFDMEn461FgGEXt5HicyGD54sc28sLaQ9JRWDMBKed8"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/StdUtils.sol": {
+                "keccak256": "0x4a5853bb9688c4e1c65626036cddd8ea2af84ef1046b704ddc3782d84a892410",
+                "urls": [
+                    "bzz-raw://09c1024e6aac9657312fcfcf5c3dee62c22edf9f74a1065e6924c4ec710ecafa",
+                    "dweb:/ipfs/QmRNURoTUkd6DiZnf8yY8o3stJpVQBifopdSpQgP9RhvRr"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/Test.sol": {
+                "keccak256": "0x3b4bb409a156dee9ce261458117fe9f81080ca844a8a26c07c857c46d155effe",
+                "urls": [
+                    "bzz-raw://5792c69fe24bdc063a14e08fe68275007fdb1e5e7e343840a77938cb7e95a64e",
+                    "dweb:/ipfs/QmcAMhaurUwzhytJFYix4vRNeZeV8g27b8LnV3t7dvYtiK"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/Vm.sol": {
+                "keccak256": "0xd7a115278b44e47816b2a9a5cea14b3c3f574182e289b29f98d5e2d0911ccae6",
+                "urls": [
+                    "bzz-raw://18c07088a04c9669c5eb6f2050bb944daba75603a97c1a03752d594f587cf1a4",
+                    "dweb:/ipfs/QmbzjH83hquj5uodqahA5YRW972PDnhtVu6cEu9YjAfVHH"
+                ],
+                "license": "MIT OR Apache-2.0"
+            },
+            "lib/forge-std/src/console.sol": {
+                "keccak256": "0x4bbf47eb762cef93729d6ef15e78789957147039b113e5d4df48e3d3fd16d0f5",
+                "urls": [
+                    "bzz-raw://af9e3a7c3d82fb5b10b57ca4d1a82f2acbef80c077f6f6ef0cc0187c7bfd9f57",
+                    "dweb:/ipfs/QmR9VzmnBDJpgiDP6CHT6truehukF9HpYvuP6kRiJbDwPP"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/console2.sol": {
+                "keccak256": "0x3b8fe79f48f065a4e4d35362171304a33784c3a90febae5f2787805a438de12f",
+                "urls": [
+                    "bzz-raw://61de63af08803549299e68b6e6e88d40f3c5afac450e4ee0a228c66a61ba003d",
+                    "dweb:/ipfs/QmWVoQ5rrVxnczD4ZZoPbD4PC9Z3uExJtzjD4awTqd14MZ"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/interfaces/IERC165.sol": {
+                "keccak256": "0x414b2861b1acbf816ccb7346d3f16cf6c1e002e9e5e40d2f1f26fa5ddc2ea600",
+                "urls": [
+                    "bzz-raw://698352fb240868ea8f1d1fe389993035eeab930f10d06934f80ccfb2b6ccbfbc",
+                    "dweb:/ipfs/QmT6WLHAgXxFhh12kWym895oTzXid1326iZiwT3pyfggoT"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/interfaces/IERC20.sol": {
+                "keccak256": "0x4cab887298790f908c27de107e4e2907ca5413aee482ef776f8d2f353c5ef947",
+                "urls": [
+                    "bzz-raw://bb715e0c4a2bdbe432bb624501506041f06e878e0b72675aebba30ad2c2b72e7",
+                    "dweb:/ipfs/QmWhhLSvkxS2NrukJJHqFY8gDVE5r9rD4PfHvR24pwdKv9"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/interfaces/IERC721.sol": {
+                "keccak256": "0xf069262a264fdb69f8f37a10d2df7374649e9ba73f8414c9c8a3b51184625f15",
+                "urls": [
+                    "bzz-raw://924a41ca82a68ffbd503a5faf2f76d13e9938f10501a71094716f12bb64b4b7f",
+                    "dweb:/ipfs/QmdWnqfKc5ZGhmxNPTde4zrFchnv9Yk9MpCMb2rdhXE5gm"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/interfaces/IMulticall3.sol": {
+                "keccak256": "0x7aac1389150499a922d1f9ef5749c908cef127cb2075b92fa17e9cb611263d0a",
+                "urls": [
+                    "bzz-raw://d95ebb7c7c463e08ebc12dab639945752fb2480acfc6e86da32f72732a7fd0c0",
+                    "dweb:/ipfs/QmNXK8P8oPWwajsQHvAHw3JPyQidPLCGQN3hWu1Lk6PBL2"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/mocks/MockERC20.sol": {
+                "keccak256": "0xadbdfc6639edec00ba94bb1133a0fd8de31ccafe45c2ef5df9b3ca61b60b559b",
+                "urls": [
+                    "bzz-raw://bc766f01bccf669abac8cc7b2096cc1352a66471ca3772ae61b1801dedc4ed4f",
+                    "dweb:/ipfs/QmNigaPj1LYkP7Z5xr4ijkUxr2K66fDGeoifG3WoM9ruyw"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/mocks/MockERC721.sol": {
+                "keccak256": "0xbfbb755bb379f58b97699f7cda0e9a2b9113daaa072e41b280a5ce6a3bff44c9",
+                "urls": [
+                    "bzz-raw://5ae0c31d29db14d6a0e9b62d33d550feb307f48a6f45068901a013321f337f87",
+                    "dweb:/ipfs/QmX25DVXW6XZDvRm6SNBGCWrZQ6oNhdq5CmgtVocvsUdwv"
+                ],
+                "license": "MIT"
+            },
+            "lib/forge-std/src/safeconsole.sol": {
+                "keccak256": "0xbef9786cb49d3eade757bad87568c49c8c8f35721f0193c95ffb055d9e466e11",
+                "urls": [
+                    "bzz-raw://3bafd2b0b2d28068d329f95ea8a1fbce3719c257fcb863fc01abcbafd8d531ab",
+                    "dweb:/ipfs/QmUeaFjKWTVDBsHVfSob4mwt6A5hTnKDz22HaUXeZhypa3"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/Panic.sol": {
+                "keccak256": "0xf7fe324703a64fc51702311dc51562d5cb1497734f074e4f483bfb6717572d7a",
+                "urls": [
+                    "bzz-raw://c6a5ff4f9fd8649b7ee20800b7fa387d3465bd77cf20c2d1068cd5c98e1ed57a",
+                    "dweb:/ipfs/QmVSaVJf9FXFhdYEYeCEfjMVHrxDh5qL4CGkxdMWpQCrqG"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/Strings.sol": {
+                "keccak256": "0x22bbc2fcbd8ec97c6813aac46c0f8048b7a2d243d852111824ff5f4339e3cd84",
+                "urls": [
+                    "bzz-raw://233f50375cdaec3a0d275c2ac2d288c323d630cb789486a0a4913b9df8b0495f",
+                    "dweb:/ipfs/QmdMnFGFEffGZXAXx3NbwFGi8894gGsN9nxApKQTGrXVhL"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol": {
+                "keccak256": "0x69f54c02b7d81d505910ec198c11ed4c6a728418a868b906b4a0cf29946fda84",
+                "urls": [
+                    "bzz-raw://8e25e4bdb7ae1f21d23bfee996e22736fc0ab44cfabedac82a757b1edc5623b9",
+                    "dweb:/ipfs/QmQdWQvB6JCP9ZMbzi8EvQ1PTETqkcTWrbcVurS7DKpa5n"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/cryptography/MessageHashUtils.sol": {
+                "keccak256": "0x8b2e492a62de1334a04bb8cc8104750cbc6ca4b339c7808cd14da8492d4bfbd7",
+                "urls": [
+                    "bzz-raw://bc671bac8e9a810f7c51214398282e6449ef7e4dfe8e2635a0dc8516c812fef0",
+                    "dweb:/ipfs/QmPr1KkJ8Fq1zbdDYsCQWbHn9B7GKxWHhsgFUXtxYM7b7U"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/math/Math.sol": {
+                "keccak256": "0x6f61a65c733690afafb4cf528b5677e704828c8350b60b948dbc1d3bb6d7689c",
+                "urls": [
+                    "bzz-raw://00265b985b303af62ee243e10db819fa8cf890d9f122f82f4f03f55b02f62654",
+                    "dweb:/ipfs/QmNneFqZn2uKK6dECxatH6aENk1EMCTETi58dGaz5NCWQe"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/math/SafeCast.sol": {
+                "keccak256": "0x195533c86d0ef72bcc06456a4f66a9b941f38eb403739b00f21fd7c1abd1ae54",
+                "urls": [
+                    "bzz-raw://b1d578337048cad08c1c03041cca5978eff5428aa130c781b271ad9e5566e1f8",
+                    "dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy"
+                ],
+                "license": "MIT"
+            },
+            "lib/openzeppelin-contracts/contracts/utils/math/SignedMath.sol": {
+                "keccak256": "0xb1970fac7b64e6c09611e6691791e848d5e3fe410fa5899e7df2e0afd77a99e3",
+                "urls": [
+                    "bzz-raw://db5fbb3dddd8b7047465b62575d96231ba8a2774d37fb4737fbf23340fabbb03",
+                    "dweb:/ipfs/QmVUSvooZKEdEdap619tcJjTLcAuH6QBdZqAzWwnAXZAWJ"
+                ],
+                "license": "MIT"
+            },
+            "src/account_abstraction/SmartAccount.sol": {
+                "keccak256": "0x995f980e603fd787eb80c4352c5587a4ae06a624df3089cfc1bfd3a9ef10f920",
+                "urls": [
+                    "bzz-raw://84f010efb7bf404585be8085371e24ca2bbf735ef6c249cb5ca58a7f3e761e4c",
+                    "dweb:/ipfs/QmV4YY7r6xejqNEAQQVokT1aqgsC6iFR5U3v3M5BkeyL7r"
+                ],
+                "license": "MIT"
+            }
+        },
+        "version": 1
+    },
+    "id": 60
 }

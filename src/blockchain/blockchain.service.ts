@@ -10,11 +10,11 @@ dotenv.config();
 @Injectable()
 export class BlockchainService {
 
-    private readonly playerContract: ethers.Contract;
-    private readonly entryPointContract: ethers.Contract;
-    private readonly defaultWallet: ethers.Wallet;
-    private readonly provider: ethers.JsonRpcProvider;
-    private readonly cntryPointContractAddress: string;
+    private playerContract: ethers.Contract;
+    private entryPointContract: ethers.Contract;
+    private defaultWallet: ethers.Wallet;
+    private provider: ethers.JsonRpcProvider;
+    private entryPointContractAddress: string;
 
     constructor() {
         if (!process.env.WALLET_KEY ||
@@ -22,7 +22,7 @@ export class BlockchainService {
             !process.env.ENTRYPOINT_CONTRACT_ADDRESS) {
             throw new Error("could not read from the environment variables");
         }
-        this.cntryPointContractAddress = process.env.ENTRYPOINT_CONTRACT_ADDRESS;
+        this.entryPointContractAddress = process.env.ENTRYPOINT_CONTRACT_ADDRESS as string;
         this.provider = new ethers.JsonRpcProvider(process.env.PROVIDER_URL as string);
         this.defaultWallet = new ethers.Wallet(
             process.env.WALLET_KEY as string,
@@ -46,7 +46,7 @@ export class BlockchainService {
             );
 
             // the smart account takes two arguement upon deploying
-            const smartAccount = await factory.deploy(owner, this.cntryPointContractAddress);
+            const smartAccount = await factory.deploy(owner, '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28');
 
             // the receipt of the transaction and the event if any 
             smartAccount.waitForDeployment();
@@ -54,6 +54,7 @@ export class BlockchainService {
             // this returns address of the deployed smart account 
             return smartAccount.target as string;
         } catch (error) {
+            console.log("Error deploying smart account ::", error);
             throw new Error(error.shortMessage);
         }
     }

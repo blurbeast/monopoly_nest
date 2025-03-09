@@ -12,7 +12,11 @@ describe('BlockchainService', () => {
     service = module.get<BlockchainService>(BlockchainService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('should deploy a smart account', async () => {
+    const smartAccountAddress = await service.deploySmartAccount('0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28');
+
+    expect(smartAccountAddress.startsWith('0x')).toBe(true);
   });
+
+
 });
