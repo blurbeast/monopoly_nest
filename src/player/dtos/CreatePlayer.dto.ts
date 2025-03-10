@@ -4,8 +4,8 @@ import { IsString } from "class-validator";
 export class CreatePlayerDto {
 
     @IsString()
-    username: string;
+    username!: string;
 
     @IsString()
-    playerAddress: string;
+    playerAddress!: string;
 }

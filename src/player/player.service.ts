@@ -20,7 +20,7 @@ export class PlayerService {
 
       return new createPlayerResponseDto();
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error as string);
     }
   }
 }
