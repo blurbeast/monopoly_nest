@@ -35,7 +35,7 @@ export class PlayerService {
 
       const player = plainToInstance(Player, {
         ...createPlayerDto,
-        smartAccountAddress
+        smartAccountAddress,
       });
 
       const savedPlayer = this.playerRepository.create(player);
