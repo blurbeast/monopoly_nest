@@ -48,4 +48,26 @@ export class PlayerService {
       throw new Error(error as string);
     }
   }
+
+
+  async getPlayerWithUsername(username: string): Promise<Player> {
+    return this.getPlayer("username", username);
+  }
+
+  private async getPlayer(action: string, value: string): Promise<Player> {
+    let player: Player | null;
+    if (action === "username") {
+      player = await this.playerRepository.findOne({ where: { 'username': value } });
+    } else if (action === "playerAddress") {
+      player = await this.playerRepository.findOne({ where: { 'playerAddress': value } });
+    } else {
+      throw new Error(`Invalid action: ${action}`);
+    }
+    if (!player) throw new Error(`Player with ${action} ${value} not found`);
+    return player;
+  }
+
+  async getPlayerWithPlayerAddress(playerAddress: string): Promise<Player> {
+    return this.getPlayer("playerAddress", playerAddress);
+  }
 }
