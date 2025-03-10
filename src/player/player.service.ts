@@ -17,7 +17,6 @@ export class PlayerService {
 
   async createPlayer(createPlayerDto: CreatePlayerDto): Promise<createPlayerResponseDto> {
     try {
-
       return new createPlayerResponseDto();
     } catch (error) {
       throw new Error(error as string);

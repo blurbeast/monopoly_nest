@@ -8,33 +8,33 @@ export enum GameStatus {
 }
 
 class Position {
-    player: string;
-    spot: number;
+    player!: string;
+    spot!: number;
 }
 
 @Entity()
 export class Game {
     @PrimaryGeneratedColumn('increment')
-    id: number;
+    id!: number;
 
     @Column({ unique: true, type: 'varchar', length: 4 })
-    gameRoomId: string;
+    gameRoomId!: string;
 
     @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
-    players: Player[];
+    players!: Player[];
 
     @Column({ unique: true, length: 42, type: 'varchar' })
-    bankContractAddress: string;
+    bankContractAddress!: string;
 
     // @Column({ type: 'timestamp', name: 'created_time', default: () => 'CURRENT_TIMESTAMP' })
     @CreateDateColumn({ type: 'timestamp', name: 'created_time' })
-    createdAt: Date;
+    createdAt!: Date;
 
     @Column()
-    currentTurn: string;
+    currentTurn!: string;
 
     @Column({ type: 'jsonb', name: 'player_position', nullable: true })
-    playerPositions: Position[];
+    playerPositions!: Position[];
 
     @Column({
         enum: GameStatus,
@@ -43,8 +43,8 @@ export class Game {
         type: 'enum',
         default: GameStatus.PENDING,
     })
-    status: GameStatus;
+    status!: GameStatus;
 
     @Column({ type: 'timestamp', name: 'ended_time', nullable: true })
-    endedAt: Date;
+    endedAt!: Date;
 }

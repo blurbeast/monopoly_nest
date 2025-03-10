@@ -55,7 +55,8 @@ export class BlockchainService {
             return smartAccount.target as string;
         } catch (error) {
             console.log("Error deploying smart account ::", error);
-            throw new Error(error.shortMessage);
+            // throw new Error(error.shortMessage);
+            throw new Error();
         }
     }
 }
