@@ -59,4 +59,14 @@ export class BlockchainService {
             throw new Error();
         }
     }
+
+    async getSmartAccountNonce(smartAccountAddress: string): Promise<string> {
+        // create an instance of the smart account via the smart account address provided
+
+        const smartAccount = new ethers.Contract(smartAccountAddress as string, SmartAccountAbi.abi, this.defaultWallet);
+
+        const smartAccountNonce = await smartAccount.nonce.staticCall();
+
+        return smartAccountNonce as string;
+    }
 }
