@@ -27,7 +27,7 @@ export class Game {
     bankContractAddress!: string;
 
     // @Column({ type: 'timestamp', name: 'created_time', default: () => 'CURRENT_TIMESTAMP' })
-    @CreateDateColumn({ type: 'timestamp', name: 'created_time' })
+    @CreateDateColumn({ type: 'timestamp', name: 'created_time', default: () => 'CURRENT_TIMESTAMP' })
     createdAt!: Date;
 
     @Column()

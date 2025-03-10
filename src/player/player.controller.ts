@@ -10,7 +10,6 @@ export class PlayerController {
     constructor(
         private readonly playerService: PlayerService,
     ) { }
-
     @Post()
     async registerPlayer(@Body() createPlayerDto: CreatePlayerDto): Promise<CreatePlayerResponseDto> {
         return await this.playerService.createPlayer(createPlayerDto);
