@@ -4,7 +4,7 @@ import { Player } from './player.entity';
 import { Repository } from 'typeorm';
 import { BlockchainService } from 'src/blockchain/blockchain.service';
 import { CreatePlayerDto } from './dtos/CreatePlayer.dto';
-import { createPlayerResponseDto } from './dtos/CreatePlayerResponse.dto';
+import { CreatePlayerResponseDto } from './dtos/CreatePlayerResponse.dto';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class PlayerService {
   ) { }
 
 
-  async createPlayer(createPlayerDto: CreatePlayerDto): Promise<createPlayerResponseDto> {
+  async createPlayer(createPlayerDto: CreatePlayerDto): Promise<CreatePlayerResponseDto> {
     try {
       const foundPlayer = await this.playerRepository.findOne({
         where: [
@@ -30,7 +30,7 @@ export class PlayerService {
       // create a smart account for the user via the blockchain service
       let smartAccountAddress = await this.blockchainService.deploySmartAccount(createPlayerDto.playerAddress);
 
-      // since we are using the create2Address there can be no duplicates 
+      // since we are using the create2Address there can be no duplicates on that chain we are deploying to.
       // let smartAccountAddressExist  = await this.playerRepository.existsBy({'smartAccountAddress': smartAccountAddress});
 
       const player = plainToInstance(Player, {
@@ -40,7 +40,7 @@ export class PlayerService {
 
       const savedPlayer = this.playerRepository.create(player);
 
-      return plainToInstance(createPlayerResponseDto, savedPlayer, {
+      return plainToInstance(CreatePlayerResponseDto, savedPlayer, {
         excludeExtraneousValues: true,
       });
 

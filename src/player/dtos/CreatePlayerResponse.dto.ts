@@ -1,6 +1,6 @@
 
 
-export class createPlayerResponseDto {
+export class CreatePlayerResponseDto {
 
     constructor() { }
     username!: string;
