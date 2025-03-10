@@ -1,6 +1,9 @@
-import { Column, Entity, IntegerType, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, IntegerType, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity('player')
+@Unique(['username'])
+@Unique(['playerAddress'])
+@Unique(['smartAccountAddress'])
 export class Player {
   @PrimaryGeneratedColumn('increment')
   id!: number;
