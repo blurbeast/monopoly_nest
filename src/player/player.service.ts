@@ -13,22 +13,27 @@ export class PlayerService {
     @InjectRepository(Player)
     private readonly playerRepository: Repository<Player>,
     private readonly blockchainService: BlockchainService,
-  ) { }
+  ) {}
 
-
-  async createPlayer(createPlayerDto: CreatePlayerDto): Promise<CreatePlayerResponseDto> {
+  async createPlayer(
+    createPlayerDto: CreatePlayerDto,
+  ): Promise<CreatePlayerResponseDto> {
     try {
       const foundPlayer = await this.playerRepository.findOne({
         where: [
           { username: createPlayerDto.username.toLowerCase() },
           { playerAddress: createPlayerDto.playerAddress },
-        ]
+        ],
       });
 
-      if (foundPlayer !== null) throw new Error(`Player ${createPlayerDto.username} already exist`);
+      if (foundPlayer !== null)
+        throw new Error(`Player ${createPlayerDto.username} already exist`);
 
       // create a smart account for the user via the blockchain service
-      let smartAccountAddress = await this.blockchainService.deploySmartAccount(createPlayerDto.playerAddress);
+      const smartAccountAddress =
+        await this.blockchainService.deploySmartAccount(
+          createPlayerDto.playerAddress,
+        );
 
       // since we are using the create2Address there can be no duplicates on that chain we are deploying to.
       // let smartAccountAddressExist  = await this.playerRepository.existsBy({'smartAccountAddress': smartAccountAddress});
@@ -43,23 +48,25 @@ export class PlayerService {
       return plainToInstance(CreatePlayerResponseDto, savedPlayer, {
         excludeExtraneousValues: true,
       });
-
     } catch (error) {
       throw new Error(error as string);
     }
   }
 
-
   async getPlayerWithUsername(username: string): Promise<Player> {
-    return this.getPlayer("username", username);
+    return this.getPlayer('username', username);
   }
 
   private async getPlayer(action: string, value: string): Promise<Player> {
     let player: Player | null;
-    if (action === "username") {
-      player = await this.playerRepository.findOne({ where: { 'username': value } });
-    } else if (action === "playerAddress") {
-      player = await this.playerRepository.findOne({ where: { 'playerAddress': value } });
+    if (action === 'username') {
+      player = await this.playerRepository.findOne({
+        where: { username: value },
+      });
+    } else if (action === 'playerAddress') {
+      player = await this.playerRepository.findOne({
+        where: { playerAddress: value },
+      });
     } else {
       throw new Error(`Invalid action: ${action}`);
     }
@@ -68,6 +75,6 @@ export class PlayerService {
   }
 
   async getPlayerWithPlayerAddress(playerAddress: string): Promise<Player> {
-    return this.getPlayer("playerAddress", playerAddress);
+    return this.getPlayer('playerAddress', playerAddress);
   }
 }

@@ -1,13 +1,11 @@
-
-import { IsString } from "class-validator";
+import { IsString } from 'class-validator';
 
 export class CreatePlayerDto {
+  constructor() {}
 
-    constructor() { }
+  @IsString()
+  username!: string;
 
-    @IsString()
-    username!: string;
-
-    @IsString()
-    playerAddress!: string;
+  @IsString()
+  playerAddress!: string;
 }

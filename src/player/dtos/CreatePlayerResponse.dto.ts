@@ -1,9 +1,6 @@
-
-
 export class CreatePlayerResponseDto {
-
-    constructor() { }
-    username!: string;
-    playerAddress!: string;
-    smartAccountAddress!: string;
+  constructor() {}
+  username!: string;
+  playerAddress!: string;
+  smartAccountAddress!: string;
 }

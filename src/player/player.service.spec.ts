@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreatePlayerDto } from './dtos/CreatePlayer.dto';
 import { PlayerService } from './player.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Player } from './player.entity';
 import { BlockchainModule } from 'src/blockchain/blockchain.module';
 import * as dotenv from 'dotenv';
 import { PlayerModule } from './player.module';
