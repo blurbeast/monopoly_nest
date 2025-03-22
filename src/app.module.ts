@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { PlayerModule } from './player/player.module';
 import { GameModule } from './game/game.module';
+import { PimlicoModule } from './pimlico/pimlico.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -23,6 +24,7 @@ dotenv.config();
     PlayerModule,
     BlockchainModule,
     GameModule,
+    PimlicoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
