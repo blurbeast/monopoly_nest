@@ -1,81 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import { sepolia } from 'viem/chains';
-import { entryPoint07Address } from 'viem/account-abstraction';
-import { createSmartAccountClient } from 'permissionless';
-import { createPimlicoClient } from 'permissionless/clients/pimlico';
 import * as dotenv from 'dotenv';
-import {
-  http,
-  createPublicClient,
-  // getAddress,
-  // parseAbi,
-  // getContract,
-} from 'viem';
-import { toKernelSmartAccount } from 'permissionless/accounts';
+import { createPimlicoClient } from 'permissionless/_types/clients/pimlico';
+import { createPublicClient, Hex, http } from 'viem';
 import * as process from 'node:process';
+import { entryPoint07Address } from 'viem/account-abstraction';
+import { toEcdsaKernelSmartAccount } from 'permissionless/_types/accounts';
+import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
+import { createSmartAccountClient } from 'permissionless';
+
 dotenv.config();
 
 @Injectable()
 export class PimlicoService {
-  private readonly serverUrlAndKey: string;
-  constructor() {
-    if (!process.env.PIMLICO_SERVICE_SEPOLIA_KEY) {
-      throw new Error('could not locate key');
-    }
-    this.serverUrlAndKey =
-      'https://api.pimlico.io/v2/11155111/rpc?apikey=' +
-        process.env.PIMLICO_SERVICE_SEPOLIA_KEY || '';
-  }
-  // create a public client
-  // public client is used to read from the state
-  public publicClient = createPublicClient({
+  // private readonly
+  constructor() {}
+
+  publicClient = createPublicClient({
     chain: sepolia,
     transport: http('https://eth-sepolia.api.onfinality.io/public'),
   });
 
-  // create a pimlico client which would act as a bundler here
-  public pimlicoClient = createPimlicoClient({
+  pimlicoUrl = 'https://api.pimlico.io/v2/11155111/rpc?apikey=';
+  pimlicoClient = createPimlicoClient({
+    transport: http(this.pimlicoUrl + process.env.PIMLICO_SERVICE_SEPOLIA_KEY),
     entryPoint: {
       address: entryPoint07Address,
       version: '0.7',
     },
-    transport: http(
-      'https://api.pimlico.io/v2/11155111/rpc?apikey=' +
-        process.env.PIMLICO_SERVICE_SEPOLIA_KEY,
-    ),
   });
 
-  // create a smart account or get a smart account
-  private async createSmartAccount(userId: number) {
-    return toKernelSmartAccount({
+  account = async (userId: number) => {
+    return toEcdsaKernelSmartAccount({
       client: this.publicClient,
-      owners: [privateKeyToAccount(`0x${process.env.WALLET_KEY}`)],
+      owners: [privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex)],
       entryPoint: {
         address: entryPoint07Address,
         version: '0.7',
       },
       index: BigInt(userId),
     });
-  }
-
-  public async getSmartAccountClient(userId: number) {
-    const smartAccount = await this.createSmartAccount(userId);
-
+  };
+  accountClient = async (userId: number) => {
+    const acc = await this.account(userId);
     return createSmartAccountClient({
-      account: smartAccount,
+      account: acc,
       chain: sepolia,
       bundlerTransport: http(
-        'https://api.pimlico.io/v2/11155111/rpc?apikey=' +
-          process.env.PIMLICO_SERVICE_SEPOLIA_KEY,
+        this.pimlicoUrl + process.env.PIMLICO_SERVICE_SEPOLIA_KEY,
       ),
       paymaster: this.pimlicoClient,
       userOperation: {
         estimateFeesPerGas: async () => {
-          const gasPrice = await this.pimlicoClient.getUserOperationGasPrice();
-          return gasPrice.fast;
+          return (await this.pimlicoClient.getUserOperationGasPrice()).fast;
         },
       },
     });
-  }
+  };
 }

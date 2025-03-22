@@ -41,46 +41,20 @@ export class BlockchainService {
   }
 
   async deploySmartAccount(owner: string): Promise<string> {
-    try {
-      if (!owner.startsWith('0x') && !(owner.length === 42)) {
-        throw new Error(`invalid address provided ${owner}`);
-      }
-      // call on the factory to create instance so as to deploy the contract
-      const factory = new ethers.ContractFactory(
-        SmartAccountAbi.abi,
-        SmartAccountAbi.bytecode,
-        this.defaultWallet,
-      );
 
-      // the smart account takes two arguement upon deploying
-      const smartAccount = await factory.deploy(
-        owner,
-        '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28',
-      );
-
-      // the receipt of the transaction and the event if any
-      smartAccount.waitForDeployment();
-
-      // this returns address of the deployed smart account
-      return smartAccount.target as string;
-    } catch (error) {
-      console.log('Error deploying smart account ::', error);
-      // throw new Error(error.shortMessage);
-      throw new Error();
-    }
   }
 
   async getSmartAccountNonce(smartAccountAddress: string): Promise<string> {
     // create an instance of the smart account via the smart account address provided
 
-    const smartAccount = new ethers.Contract(
-      smartAccountAddress,
-      SmartAccountAbi.abi,
-      this.defaultWallet,
-    );
-
-    const smartAccountNonce = await smartAccount.nonce.staticCall();
-
-    return smartAccountNonce as string;
+    // const smartAccount = new ethers.Contract(
+    //   smartAccountAddress,
+    //   SmartAccountAbi.abi,
+    //   this.defaultWallet,
+    // );
+    //
+    // const smartAccountNonce = await smartAccount.nonce.staticCall();
+    //
+    // return smartAccountNonce as string;
   }
 }
