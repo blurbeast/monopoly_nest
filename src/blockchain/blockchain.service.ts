@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
 import * as PlayerAbi from './abis/PlayerAbi.json';
 import * as EntrypointAbi from './abis/EntryPointAbi.json';
-import * as SmartAccountAbi from './abis/SmartAccountAbi.json';
+// import * as SmartAccountAbi from './abis/SmartAccountAbi.json';
 import * as dotenv from 'dotenv';
+import { PimlicoService } from '../pimlico/pimlico.service';
 dotenv.config();
 
 @Injectable()
@@ -13,8 +14,9 @@ export class BlockchainService {
   private readonly defaultWallet: ethers.Wallet;
   private readonly provider: ethers.JsonRpcProvider;
   private entryPointContractAddress: string;
+  // private pimlicoService: PimlicoService;
 
-  constructor() {
+  constructor(private pimlicoService: PimlicoService) {
     if (
       !process.env.WALLET_KEY ||
       !process.env.PROVIDER_URL ||
@@ -40,21 +42,30 @@ export class BlockchainService {
     );
   }
 
-  async deploySmartAccount(owner: string): Promise<string> {
+  createSmartAccount = async (userId: number) => {
+    const newSmartAccount = await this.pimlicoService.account(userId);
+    const userAddress: string = newSmartAccount.address;
 
-  }
+    return userAddress;
+  };
 
-  async getSmartAccountNonce(smartAccountAddress: string): Promise<string> {
-    // create an instance of the smart account via the smart account address provided
 
-    // const smartAccount = new ethers.Contract(
-    //   smartAccountAddress,
-    //   SmartAccountAbi.abi,
-    //   this.defaultWallet,
-    // );
-    //
-    // const smartAccountNonce = await smartAccount.nonce.staticCall();
-    //
-    // return smartAccountNonce as string;
-  }
+
+  // async deploySmartAccount(owner: string): Promise<string> {
+  //
+  // }
+  //
+  // async getSmartAccountNonce(smartAccountAddress: string): Promise<string> {
+  //   // create an instance of the smart account via the smart account address provided
+  //
+  //   // const smartAccount = new ethers.Contract(
+  //   //   smartAccountAddress,
+  //   //   SmartAccountAbi.abi,
+  //   //   this.defaultWallet,
+  //   // );
+  //   //
+  //   // const smartAccountNonce = await smartAccount.nonce.staticCall();
+  //   //
+  //   // return smartAccountNonce as string;
+  // }
 }

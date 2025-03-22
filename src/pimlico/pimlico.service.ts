@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
-import { createPimlicoClient } from 'permissionless/_types/clients/pimlico';
-import { createPublicClient, Hex, http } from 'viem';
+import { createPimlicoClient } from 'permissionless/clients/pimlico';
+import { createPublicClient, getAddress, Hex, http } from 'viem';
 import * as process from 'node:process';
 import { entryPoint07Address } from 'viem/account-abstraction';
-import { toEcdsaKernelSmartAccount } from 'permissionless/_types/accounts';
+import { toEcdsaKernelSmartAccount } from 'permissionless/accounts';
 import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
@@ -30,7 +30,7 @@ export class PimlicoService {
     },
   });
 
-  account = async (userId: number) => {
+  public account = async (userId: number) => {
     return toEcdsaKernelSmartAccount({
       client: this.publicClient,
       owners: [privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex)],
@@ -55,6 +55,20 @@ export class PimlicoService {
           return (await this.pimlicoClient.getUserOperationGasPrice()).fast;
         },
       },
+    });
+  };
+
+  sendUserOperation = async (
+    userId: number,
+    target: string,
+    value: number,
+    encodedData: Hex,
+  ) => {
+    const client = await this.accountClient(userId);
+    return await client.sendTransaction({
+      to: getAddress(target),
+      value: BigInt(value),
+      data: encodedData,
     });
   };
 }
