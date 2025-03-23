@@ -5,6 +5,7 @@ import * as EntrypointAbi from './abis/EntryPointAbi.json';
 // import * as SmartAccountAbi from './abis/SmartAccountAbi.json';
 import * as dotenv from 'dotenv';
 import { PimlicoService } from '../pimlico/pimlico.service';
+import { encodeFunctionData, parseAbi } from 'viem';
 dotenv.config();
 
 @Injectable()
@@ -49,23 +50,23 @@ export class BlockchainService {
     return userAddress;
   };
 
+  interactOnChain = async (target: string) => {
+    const encodedData = encodeFunctionData({
+      abi: parseAbi([
+        'function setCount(uint256 _value) external returns (uint256)',
+      ]),
+      functionName: 'setCount',
+      args: [BigInt(30100)],
+    });
 
+    const response = await this.pimlicoService.sendUserOperation(
+      3,
+      target,
+      0,
+      encodedData,
+    );
 
-  // async deploySmartAccount(owner: string): Promise<string> {
-  //
-  // }
-  //
-  // async getSmartAccountNonce(smartAccountAddress: string): Promise<string> {
-  //   // create an instance of the smart account via the smart account address provided
-  //
-  //   // const smartAccount = new ethers.Contract(
-  //   //   smartAccountAddress,
-  //   //   SmartAccountAbi.abi,
-  //   //   this.defaultWallet,
-  //   // );
-  //   //
-  //   // const smartAccountNonce = await smartAccount.nonce.staticCall();
-  //   //
-  //   // return smartAccountNonce as string;
-  // }
+    console.log('responses ::: ', response);
+    return response;
+  };
 }

@@ -65,6 +65,7 @@ export class PimlicoService {
     encodedData: Hex,
   ) => {
     const client = await this.accountClient(userId);
+    console.log('target is :: ', target);
     return await client.sendTransaction({
       to: getAddress(target),
       value: BigInt(value),
