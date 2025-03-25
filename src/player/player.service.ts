@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { BlockchainService } from 'src/blockchain/blockchain.service';
 import { CreatePlayerDto } from './dtos/CreatePlayer.dto';
 import { CreatePlayerResponseDto } from './dtos/CreatePlayerResponse.dto';
+import { plainToInstance } from 'class-transformer';
+
 // import { plainToInstance } from 'class-transformer';
 
 @Injectable()
@@ -26,10 +28,29 @@ export class PlayerService {
         ],
       });
 
-      if (foundPlayer !== null)
+      if (foundPlayer !== null) {
         throw new Error(`Player ${createPlayerDto.username} already exist`);
+      }
 
-      return new CreatePlayerResponseDto();
+      // crete a smart account for  the new user
+      // call the blockchain service to do that.
+      // since we are using one single key for each user , we are using salt to differentiate each user
+
+      // now we need to look for a way to generate number in terms of salt for each user
+
+      const newUserAddress = await this.blockchainService.createSmartAccount(1);
+
+      const player = plainToInstance(Player, createPlayerDto);
+
+      // assign the smart account address to a user
+      player.smartAccountAddress = newUserAddress;
+
+      // save the player
+      const savedPlayer = await this.playerRepository.save(player);
+
+      return plainToInstance(CreatePlayerResponseDto, savedPlayer, {
+        excludeExtraneousValues: true,
+      });
     } catch (error) {
       throw new Error(error as string);
     }
@@ -38,7 +59,6 @@ export class PlayerService {
   async getPlayerWithUsername(username: string): Promise<Player> {
     return this.getPlayer('username', username);
   }
-
   private async getPlayer(action: string, value: string): Promise<Player> {
     let player: Player | null;
     if (action === 'username') {
