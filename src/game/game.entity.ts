@@ -48,7 +48,7 @@ export class Game {
   @Column({
     enum: GameStatus,
     name: 'game_status',
-    enumName: 'status',
+    enumName: 'game_status_enum',
     type: 'enum',
     default: GameStatus.PENDING,
   })
