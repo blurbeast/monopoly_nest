@@ -78,6 +78,11 @@ export class GameService {
       throw new Error('game already full');
     }
 
+    // check if the game has not joined before
+    if (game.players.some((p) => p.playerAddress === player.playerAddress)) {
+      throw new Error('player already in the game room');
+    }
+
     game.players.push(player);
 
     // update it back in the repo
@@ -105,11 +110,9 @@ export class GameService {
 
     // call on the bank contract here to add players and also give them tokens to their smart account
     // get all players smart account
-    const playersSmartAccount: string[] = [];
-
-    for (let i: number = 0; i < game.players.length; i += 1) {
-      playersSmartAccount.push(game.players[i].smartAccountAddress);
-    }
+    const playersSmartAccount: string[] = game.players.map(
+      (p) => p.smartAccountAddress,
+    );
 
     // now call the blockchain service to call on the game contract address so that players address has the token
     await this.blockchainService.mintToPlayers(
@@ -119,11 +122,32 @@ export class GameService {
 
     game.hasStarted = true;
     game.status = GameStatus.ACTIVE;
+    game.currentTurn = game.players[0].playerAddress;
 
     // update the game
     await this.gameRepository.update(game.id, game);
 
     return 'game started';
+  };
+
+  nextTurn = async (gameRoomId: string): Promise<string> => {
+    const game = await this.gameRepository.findOne({ where: { gameRoomId } });
+    if (game === null) {
+      throw new Error('invalid game id provided');
+    }
+    if (game.hasStarted && game.status !== GameStatus.PENDING) {
+      throw new Error('game already started');
+    }
+
+    const playerIndex = game.players.findIndex(
+      (p) => p.playerAddress === game.currentTurn,
+    );
+    const nextIndex = (playerIndex + 1) % game.players.length;
+    game.currentTurn = game.players[nextIndex].playerAddress;
+
+    await this.gameRepository.update(game.id, game);
+
+    return `next player :: ${game.players[nextIndex].username}`;
   };
 
   private assignRoomId(): string {
