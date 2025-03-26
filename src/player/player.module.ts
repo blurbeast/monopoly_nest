@@ -6,7 +6,7 @@ import { PlayerController } from './player.controller';
 import { BlockchainModule } from 'src/blockchain/blockchain.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Player]), BlockchainModule],
+  imports: [TypeOrmModule.forFeature([Player]),],
   providers: [PlayerService],
   controllers: [PlayerController],
   exports: [PlayerService],
