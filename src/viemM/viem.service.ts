@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { createPimlicoClient } from 'permissionless/clients/pimlico';
-import { createPublicClient, getAddress, Hex, http } from 'viem';
+import {
+  createPublicClient,
+  createWalletClient,
+  getAddress,
+  Hex,
+  http,
+} from 'viem';
 import * as process from 'node:process';
 import { entryPoint07Address } from 'viem/account-abstraction';
 import { toEcdsaKernelSmartAccount } from 'permissionless/accounts';
 import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
+import * as BankContract from '../blockchain/abis/BankContract.json';
 
 dotenv.config();
 
@@ -55,6 +62,28 @@ export class ViemService {
           return (await this.pimlicoClient.getUserOperationGasPrice()).fast;
         },
       },
+    });
+  };
+
+  deployAContract = async (
+    numberOfPlayers: number,
+    nftContractAddress: string,
+  ) => {
+    // create a wallet client
+    const acc = privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex);
+    const walletClient = createWalletClient({
+      account: acc,
+      chain: sepolia,
+      transport: http(
+        this.pimlicoUrl + process.env.PIMLICO_SERVICE_SEPOLIA_KEY,
+      ),
+    });
+
+    //return address of the contract
+    return await walletClient.deployContract({
+      abi: BankContract.abi,
+      bytecode: '0x',
+      args: [numberOfPlayers, getAddress(nftContractAddress)],
     });
   };
 

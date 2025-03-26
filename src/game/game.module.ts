@@ -11,4 +11,4 @@ import { BlockchainModule } from 'src/blockchain/blockchain.module';
   controllers: [GameController],
   exports: [GameService],
 })
-export class GameModule { }
+export class GameModule {}

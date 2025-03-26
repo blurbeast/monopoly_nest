@@ -10,14 +10,21 @@ export class BlockchainService {
   // private readonly defaultWallet: ethers.Wallet;
   // private readonly provider: ethers.JsonRpcProvider;
   // private entryPointContractAddress: string;
+  private readonly nftContractAddress: any;
 
   constructor(
-    private readonly pimlicoService: ViemService,
+    private readonly viemService: ViemService,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    if (!configService.get<string>('NFT_CONTRACT_ADDRESS')) {
+      throw new Error('could not read environment variables');
+    }
+
+    this.nftContractAddress = configService.get<string>('NFT_CONTRACT_ADDRESS');
+  }
 
   createSmartAccount = async (userId: number) => {
-    const newSmartAccount = await this.pimlicoService.account(userId);
+    const newSmartAccount = await this.viemService.account(userId);
     const userAddress: string = newSmartAccount.address;
 
     return userAddress;
@@ -25,6 +32,11 @@ export class BlockchainService {
 
   deployBankContract = () => {
     // using libraries like ethers or viem to deploy the contract
+    // for this project we are relying on view at the moment
+    // in the future we might as well use other libraries , hence, the block chain module is on it own while the libraries module are separate as well
+
+    // the bank contract takes the number of players and the nftContract address
+
 
 
   };
@@ -38,7 +50,7 @@ export class BlockchainService {
       args: [BigInt(30100)],
     });
 
-    const response = await this.pimlicoService.sendUserOperation(
+    const response = await this.viemService.sendUserOperation(
       3,
       target,
       0,
