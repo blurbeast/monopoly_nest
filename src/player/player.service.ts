@@ -33,7 +33,7 @@ export class PlayerService {
         throw new Error(`Player ${createPlayerDto.username} already exist`);
       }
       // always convert username to lowercase
-      createPlayerDto.username.toLowerCase();
+      createPlayerDto.username = createPlayerDto.username.toLowerCase();
 
       // now we need to look for a way to generate number in terms of salt for each user
       const userSalt = await this.playerRepository.count();
@@ -71,18 +71,15 @@ export class PlayerService {
   }
 
   private async getPlayer(action: string, value: string): Promise<Player> {
-    let player: Player | null;
-    if (action === 'username') {
-      player = await this.playerRepository.findOne({
-        where: { username: value },
-      });
-    } else if (action === 'playerAddress') {
-      player = await this.playerRepository.findOne({
-        where: { playerAddress: value },
-      });
-    } else {
-      throw new Error(`Invalid action: ${action}`);
-    }
+    const player: Player | null =
+      action === 'username'
+        ? await this.playerRepository.findOne({
+            where: { username: value },
+          })
+        : await this.playerRepository.findOne({
+            where: { playerAddress: value },
+          });
+
     if (!player) throw new Error(`Player with ${action} ${value} not found`);
     return player;
   }

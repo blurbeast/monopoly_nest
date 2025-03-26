@@ -55,7 +55,7 @@ export class GameService {
   ): Promise<string> => {
     // check if the gameId is valid
     const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (game === null) {
+    if (!game ) {
       throw new Error('invalid game id provided');
     }
 
@@ -63,7 +63,7 @@ export class GameService {
     const player =
       await this.playerService.getPlayerWithPlayerAddress(userAddress);
 
-    if (player === null) {
+    if (!player) {
       throw new Error('could not locate player with the specified address');
     }
 
@@ -95,7 +95,7 @@ export class GameService {
   startGame = async (gameRoomId: string): Promise<string> => {
     // find the game
     const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (game === null) {
+    if (!game) {
       throw new Error('invalid game id provided');
     }
 
@@ -132,11 +132,11 @@ export class GameService {
 
   nextTurn = async (gameRoomId: string): Promise<string> => {
     const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (game === null) {
+    if (!game) {
       throw new Error('invalid game id provided');
     }
-    if (game.hasStarted && game.status !== GameStatus.PENDING) {
-      throw new Error('game already started');
+    if (!game.hasStarted || game.status !== GameStatus.ACTIVE) {
+      throw new Error('game is not active');
     }
 
     const playerIndex = game.players.findIndex(
