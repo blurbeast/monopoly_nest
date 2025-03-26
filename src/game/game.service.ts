@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Game } from './game.entity';
+import { Game, GameStatus } from './game.entity';
 import { Repository } from 'typeorm';
 import { BlockchainService } from 'src/blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
@@ -25,6 +25,10 @@ export class GameService {
     if (foundPlayer === null) {
       throw new Error('could not find player');
     }
+    // ensure the number of players does not exceed 9
+    if (numberOfPlayer > 9) {
+      throw new Error('number of players cannot exceed 9');
+    }
     // deploy game bank on chain
     //to get the bank address deploy on chain , we need to call on the blockchain service
     const bankAddress: string =
@@ -38,6 +42,7 @@ export class GameService {
       bankContractAddress: bankAddress,
     });
     game.players.push(foundPlayer);
+    game.numberOfPlayers = numberOfPlayer;
 
     const savedGame = await this.gameRepository.save(game);
 
@@ -62,6 +67,17 @@ export class GameService {
       throw new Error('could not locate player with the specified address');
     }
 
+    if (game.hasStarted) {
+      throw new Error('cannot join already started game');
+    }
+
+    if (
+      game.players.length === 9 ||
+      game.players.length === game.numberOfPlayers
+    ) {
+      throw new Error('game already full');
+    }
+
     game.players.push(player);
 
     // update it back in the repo
@@ -71,7 +87,30 @@ export class GameService {
     return 'successfully joined';
   };
 
-  startGame = async () => {};
+  startGame = async (gameRoomId: string): Promise<string> => {
+    // find the game
+    const game = await this.gameRepository.findOne({ where: { gameRoomId } });
+    if (game === null) {
+      throw new Error('invalid game id provided');
+    }
+
+    // check if the game has started and is on PENDING
+    if (game.hasStarted && game.status !== GameStatus.PENDING) {
+      throw new Error('game already started');
+    }
+    // confirm that more than  player has joined the game or better still confirm with number of players specified with number of joined player
+    if (game.players.length < 2 && game.players.length < game.numberOfPlayers) {
+      throw new Error('not all players has joined game');
+    }
+    game.hasStarted = true;
+    game.status = GameStatus.ACTIVE;
+
+    // update the game
+    await this.gameRepository.update(game.id, game);
+
+
+    return 'game started';
+  };
 
   private assignRoomId(): string {
     let roomId: string = this.generateRoomId();

@@ -32,6 +32,9 @@ export class Game {
   @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
   players!: Player[];
 
+  @Column({ type: 'int' })
+  numberOfPlayers!: number;
+
   @Column({ unique: true, length: 42, type: 'varchar' })
   bankContractAddress!: string;
 
