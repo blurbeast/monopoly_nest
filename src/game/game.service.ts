@@ -15,9 +15,8 @@ export class GameService {
   async createGame(): Promise<string> {
     // deploy game bank on chain
     //to get the bank address deploy on chain , we need to call on the blockchain service
-
-    const bankAddress: string = '';
-
+    const bankAddress: string =
+      await this.blockchainService.deployBankContract(9);
 
     // create game room;
     const roomId: string = this.assignRoomId();

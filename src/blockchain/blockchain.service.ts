@@ -30,15 +30,16 @@ export class BlockchainService {
     return userAddress;
   };
 
-  deployBankContract = () => {
+  deployBankContract = async (numberOfPlayers: number) => {
     // using libraries like ethers or viem to deploy the contract
     // for this project we are relying on view at the moment
     // in the future we might as well use other libraries , hence, the block chain module is on it own while the libraries module are separate as well
 
     // the bank contract takes the number of players and the nftContract address
-
-
-
+    return await this.viemService.deployAContract(
+      numberOfPlayers,
+      this.nftContractAddress as string,
+    );
   };
 
   interactOnChain = async (target: string) => {
