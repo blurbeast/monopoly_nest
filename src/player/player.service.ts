@@ -17,6 +17,7 @@ export class PlayerService {
     private readonly blockchainService: BlockchainService,
   ) {}
 
+  // inform the front end to always send a lower case of the username
   async createPlayer(
     createPlayerDto: CreatePlayerDto,
   ): Promise<CreatePlayerResponseDto> {
@@ -31,14 +32,21 @@ export class PlayerService {
       if (foundPlayer !== null) {
         throw new Error(`Player ${createPlayerDto.username} already exist`);
       }
+      // always convert username to lowercase
+      createPlayerDto.username.toLowerCase();
+
+      // now we need to look for a way to generate number in terms of salt for each user
+      const userSalt = await this.playerRepository.count();
 
       // crete a smart account for  the new user
       // call the blockchain service to do that.
       // since we are using one single key for each user , we are using salt to differentiate each user
 
-      // now we need to look for a way to generate number in terms of salt for each user
-
-      const newUserAddress = await this.blockchainService.createSmartAccount(1);
+      // since we are not deleting any player , then it is safe to use the number of players
+      const newUserAddress = await this.blockchainService.createSmartAccount(
+        // salt
+        userSalt + 10,
+      );
 
       const player = plainToInstance(Player, createPlayerDto);
 
@@ -56,9 +64,11 @@ export class PlayerService {
     }
   }
 
+  // expose the api for this
   async getPlayerWithUsername(username: string): Promise<Player> {
     return this.getPlayer('username', username);
   }
+
   private async getPlayer(action: string, value: string): Promise<Player> {
     let player: Player | null;
     if (action === 'username') {
@@ -76,6 +86,7 @@ export class PlayerService {
     return player;
   }
 
+  // expose the api for this
   async getPlayerWithPlayerAddress(playerAddress: string): Promise<Player> {
     return this.getPlayer('playerAddress', playerAddress);
   }
