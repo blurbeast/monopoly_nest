@@ -23,6 +23,9 @@ export class Game {
   @PrimaryGeneratedColumn('increment')
   id!: number;
 
+  @Column({ type: 'boolean', default: false })
+  hasStarted!: boolean;
+
   @Column({ unique: true, type: 'varchar', length: 4 })
   gameRoomId!: string;
 

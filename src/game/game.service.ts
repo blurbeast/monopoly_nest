@@ -44,7 +44,10 @@ export class GameService {
     return savedGame.gameRoomId;
   };
 
-  joinGame = async (gameRoomId: string, userAddress: string) => {
+  joinGame = async (
+    gameRoomId: string,
+    userAddress: string,
+  ): Promise<string> => {
     // check if the gameId is valid
     const game = await this.gameRepository.findOne({ where: { gameRoomId } });
     if (game === null) {
@@ -64,7 +67,11 @@ export class GameService {
     // update it back in the repo
 
     await this.gameRepository.update(game.id, game);
+
+    return 'successfully joined';
   };
+
+  startGame = async () => {};
 
   private assignRoomId(): string {
     let roomId: string = this.generateRoomId();
