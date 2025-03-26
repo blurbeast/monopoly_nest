@@ -1,4 +1,21 @@
 {
-  "abi": [],
+  "abi": [
+    {
+      "type": "function",
+      "name": "mintTo",
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address[]"
+        },
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    }
+  ],
   "bytecode": "0x"
 }

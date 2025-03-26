@@ -102,12 +102,26 @@ export class GameService {
     if (game.players.length < 2 && game.players.length < game.numberOfPlayers) {
       throw new Error('not all players has joined game');
     }
+
+    // call on the bank contract here to add players and also give them tokens to their smart account
+    // get all players smart account
+    const playersSmartAccount: string[] = [];
+
+    for (let i: number = 0; i < game.players.length; i += 1) {
+      playersSmartAccount.push(game.players[i].smartAccountAddress);
+    }
+
+    // now call the blockchain service to call on the game contract address so that players address has the token
+    await this.blockchainService.mintToPlayers(
+      game.bankContractAddress,
+      playersSmartAccount,
+    );
+
     game.hasStarted = true;
     game.status = GameStatus.ACTIVE;
 
     // update the game
     await this.gameRepository.update(game.id, game);
-
 
     return 'game started';
   };

@@ -41,17 +41,18 @@ export class PlayerService {
       // crete a smart account for  the new user
       // call the blockchain service to do that.
       // since we are using one single key for each user , we are using salt to differentiate each user
-
+      const userId: number = userSalt + 10;
       // since we are not deleting any player , then it is safe to use the number of players
       const newUserAddress = await this.blockchainService.createSmartAccount(
         // salt
-        userSalt + 10,
+        userId,
       );
 
       const player = plainToInstance(Player, createPlayerDto);
 
       // assign the smart account address to a user
       player.smartAccountAddress = newUserAddress;
+      player.userSalt = userId;
 
       // save the player
       const savedPlayer = await this.playerRepository.save(player);

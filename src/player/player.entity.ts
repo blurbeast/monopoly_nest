@@ -22,6 +22,9 @@ export class Player {
   @Column({ unique: true, type: 'varchar', length: 42 })
   playerAddress!: string;
 
+  @Column({ unique: true, type: 'int' })
+  userSalt!: number;
+
   @Column({ nullable: true, type: 'int' })
   currentGameId!: number;
 

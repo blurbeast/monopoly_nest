@@ -2,26 +2,32 @@ import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { createPimlicoClient } from 'permissionless/clients/pimlico';
 import {
+  Account,
   createPublicClient,
   createWalletClient,
   getAddress,
+  getContract,
   Hex,
   http,
 } from 'viem';
-import * as process from 'node:process';
 import { entryPoint07Address } from 'viem/account-abstraction';
 import { toEcdsaKernelSmartAccount } from 'permissionless/accounts';
 import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
 import * as BankContract from '../blockchain/abis/BankContract.json';
+import { ConfigService } from '@nestjs/config';
 
 dotenv.config();
 
 @Injectable()
 export class ViemService {
-  // private readonly
-  constructor() {}
+  private readonly privateKey: Account;
+  constructor(private readonly configService: ConfigService) {
+    this.privateKey = privateKeyToAccount(
+      ('0x' + process.env.WALLET_KEY) as Hex,
+    );
+  }
 
   publicClient = createPublicClient({
     chain: sepolia,
@@ -65,25 +71,39 @@ export class ViemService {
     });
   };
 
-  deployAContract = async (
-    numberOfPlayers: number,
-    nftContractAddress: string,
-  ) => {
-    // create a wallet client
-    const acc = privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex);
-    const walletClient = createWalletClient({
+  private _createWallet = () => {
+    const acc = privateKeyToAccount(
+      ('0x' + this.configService.get<string>('WALLET_KEY')) as Hex,
+    );
+    return createWalletClient({
       account: acc,
       chain: sepolia,
       transport: http(
         this.pimlicoUrl + process.env.PIMLICO_SERVICE_SEPOLIA_KEY,
       ),
     });
+  };
+
+  deployAContract = async (
+    numberOfPlayers: number,
+    nftContractAddress: string,
+  ) => {
+    // create a wallet client
+    const walletClient = this._createWallet();
 
     //return address of the contract
     return await walletClient.deployContract({
       abi: BankContract.abi,
       bytecode: '0x',
       args: [numberOfPlayers, getAddress(nftContractAddress)],
+    });
+  };
+
+  getAContractInstance = (contractAddress: string) => {
+    return getContract({
+      address: getAddress(contractAddress),
+      abi: BankContract.abi,
+      client: this._createWallet(),
     });
   };
 
