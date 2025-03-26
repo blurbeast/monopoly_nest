@@ -10,12 +10,13 @@ export class GameService {
   constructor(
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
     private readonly blockchainService: BlockchainService,
-  ) { }
+  ) {}
 
-  async createGame(): Promise<String> {
+  async createGame(): Promise<string> {
+    // deploy game bank on chain
+    //to get the bank address deploy on chain , we need to call on the blockchain service
 
-    // deploy game bank onchain 
-    const bankAddress: string = "";
+    const bankAddress: string = '';
 
 
     // create game room;
@@ -23,25 +24,31 @@ export class GameService {
 
     const game = plainToInstance(Game, {
       gameRoomId: roomId,
-      bankContractAddress: bankAddress
+      bankContractAddress: bankAddress,
     });
 
-    const savedGame = this.gameRepository.create(game);
+    const savedGame = await this.gameRepository.save(game);
 
     return savedGame.gameRoomId;
   }
 
   private assignRoomId(): string {
     let roomId: string = this.generateRoomId();
-    while (this.gameRepository.findOne({ where: { 'gameRoomId': roomId } })) {
+    while (
+      this.gameRepository.findOne({
+        where: {
+          gameRoomId: roomId,
+        },
+      }) !== null
+    ) {
       roomId = this.generateRoomId();
     }
     return roomId;
   }
 
   private generateRoomId(): string {
-    const ids: string = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let roomId: string = "";
+    const ids: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let roomId: string = '';
     for (let i = 0; i < 5; i++) {
       roomId += ids.charAt(Math.floor(Math.random() * ids.length));
     }

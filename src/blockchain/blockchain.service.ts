@@ -25,6 +25,8 @@ export class BlockchainService {
     return userAddress;
   };
 
+  deployBankContract = () => {};
+
   interactOnChain = async (target: string) => {
     const encodedData = encodeFunctionData({
       abi: parseAbi([
