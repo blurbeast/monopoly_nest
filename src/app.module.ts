@@ -5,7 +5,7 @@ import { AppService } from './app.service';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { PlayerModule } from './player/player.module';
 import { GameModule } from './game/game.module';
-import { PimlicoModule } from './pimlico/pimlico.module';
+import { ViemModule } from './viemM/viem.module';
 import * as dotenv from 'dotenv';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -36,7 +36,7 @@ dotenv.config();
     PlayerModule,
     BlockchainModule,
     GameModule,
-    PimlicoModule,
+    ViemModule,
   ],
   controllers: [AppController],
   providers: [AppService],

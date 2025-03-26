@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PimlicoService } from './pimlico.service';
+import { ViemService } from './viem.service';
 
 describe('PimlicoService', () => {
-  let service: PimlicoService;
+  let service: ViemService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PimlicoService],
+      providers: [ViemService],
     }).compile();
 
-    service = module.get<PimlicoService>(PimlicoService);
+    service = module.get<ViemService>(ViemService);
   });
 
   it('should be defined', () => {

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { BlockchainService } from './blockchain.service';
 import { BlockchainController } from './blockchain.controller';
-import { PimlicoModule } from '../pimlico/pimlico.module';
+import { ViemModule } from '../viemM/viem.module';
 
 @Module({
-  imports: [PimlicoModule],
+  imports: [ViemModule],
   providers: [BlockchainService],
   controllers: [BlockchainController],
   exports: [BlockchainService],

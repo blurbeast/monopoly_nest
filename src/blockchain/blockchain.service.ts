@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import * as dotenv from 'dotenv';
-import { PimlicoService } from '../pimlico/pimlico.service';
+import { ViemService } from '../viemM/viem.service';
 import { encodeFunctionData, parseAbi } from 'viem';
 import { ConfigService } from '@nestjs/config';
-dotenv.config();
 
 @Injectable()
 export class BlockchainService {
@@ -14,7 +12,7 @@ export class BlockchainService {
   // private entryPointContractAddress: string;
 
   constructor(
-    private readonly pimlicoService: PimlicoService,
+    private readonly pimlicoService: ViemService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -25,7 +23,11 @@ export class BlockchainService {
     return userAddress;
   };
 
-  deployBankContract = () => {};
+  deployBankContract = () => {
+    // using libraries like ethers or viem to deploy the contract
+
+
+  };
 
   interactOnChain = async (target: string) => {
     const encodedData = encodeFunctionData({

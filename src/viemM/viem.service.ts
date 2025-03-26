@@ -12,7 +12,7 @@ import { createSmartAccountClient } from 'permissionless';
 dotenv.config();
 
 @Injectable()
-export class PimlicoService {
+export class ViemService {
   // private readonly
   constructor() {}
 
