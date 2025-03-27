@@ -94,7 +94,7 @@ export class ViemService {
     //return address of the contract
     return await walletClient.deployContract({
       abi: BankContract.abi,
-      bytecode: '0x',
+      bytecode: BankContract.bytecode.object as Hex,
       args: [numberOfPlayers, getAddress(nftContractAddress)],
     });
   };
