@@ -40,4 +40,13 @@ describe('BlockchainService', () => {
       '0xa41c572E2D4Edddd220576e26de15f990ddefa30',
     );
   });
+
+  it('deploy bank contract', async () => {
+    // call the deploy contract function
+    const address = await service.deployBankContract(7);
+    console.log('deploy bank contract address', address);
+    expect(address).toBeDefined();
+    expect(address.length).toBe(42);
+    expect(address.startsWith('0x')).toBe(true);
+  }, 10_000);
 });

@@ -7,6 +7,7 @@ import { PlayerModule } from './player/player.module';
 import { GameModule } from './game/game.module';
 import { ViemModule } from './viemM/viem.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EthersMModule } from './ethers-m/ethers-m.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     BlockchainModule,
     GameModule,
     ViemModule,
+    EthersMModule,
   ],
   controllers: [AppController],
   providers: [AppService],
