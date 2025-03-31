@@ -34,6 +34,8 @@ export class EthersMService {
       gameToken,
     );
 
+    await f.waitForDeployment();
+
     return f.target as string;
   };
 }

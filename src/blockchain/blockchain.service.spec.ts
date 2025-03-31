@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BlockchainService } from './blockchain.service';
 import { ViemService } from '../viemM/viem.service';
 import { ConfigService } from '@nestjs/config';
+import { EthersMService } from '../ethers-m/ethers-m.service';
 
 describe('BlockchainService', () => {
   let service: BlockchainService;
@@ -10,7 +11,12 @@ describe('BlockchainService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [BlockchainService, ViemService, ConfigService],
+      providers: [
+        BlockchainService,
+        ViemService,
+        ConfigService,
+        EthersMService,
+      ],
     }).compile();
 
     service = module.get<BlockchainService>(BlockchainService);
@@ -48,5 +54,5 @@ describe('BlockchainService', () => {
     expect(address).toBeDefined();
     expect(address.length).toBe(42);
     expect(address.startsWith('0x')).toBe(true);
-  }, 10_000);
-});
+  }, 30_000);
+}); // 0xfA9e5d357cE70ACB6FF75e8F553EddAE970B49fd

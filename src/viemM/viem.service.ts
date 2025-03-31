@@ -16,10 +16,7 @@ import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
 import * as BankContract from '../blockchain/abis/BankContract.json';
-import * as BankFactory from '../blockchain/abis/BankFactory.json';
 import { ConfigService } from '@nestjs/config';
-import { ethers } from 'ethers';
-// import * as BankContract from '../blockchain';
 
 dotenv.config();
 
@@ -88,78 +85,9 @@ export class ViemService {
   deployAContract = async (
     numberOfPlayers: number,
     nftContractAddress: string,
-  ) => {
-    // console.log('deployAContract');
-    // // create a wallet client
-    const walletClient = this._createWallet();
-    //
-    // const hash = await walletClient.deployContract({
-    //   abi: BankContract.abi,
-    //   bytecode: BankContract.bytecode.object as `0x${string}`,
-    //   args: [
-    //     numberOfPlayers,
-    //     nftContractAddress,
-    //     getAddress('0x4A30f459F694876A5c6b726995274076dcD21E67'),
-    //   ],
-    //   gas: BigInt(1000000),
-    // });
-    //
-    // const receipt = await this.publicClient.waitForTransactionReceipt({
-    //   hash,
-    // });
-    // console.log(`Deployed at: ${receipt.contractAddress}`);
-
-    const factoryContract = getContract({
-      address: getAddress('0xe6f91F1986177a9BB54Bbcb37021422b08EeF3bE'),
-      abi: BankFactory.abi,
-      client: walletClient,
-    });
-
-    const tokenAddress = await factoryContract.read.gameToken();
-
-    console.log('gotten token address is ::: ', tokenAddress);
-
-    const newAddr = await factoryContract.write.deployGameBank([
-      numberOfPlayers,
-      getAddress(nftContractAddress),
-    ]);
-
-    console.log('gotten addr on chain is here ::: ', newAddr);
-
-    const receipt = await this.publicClient.waitForTransactionReceipt({
-      hash: newAddr,
-    });
-    console.log('receipt ::: ', receipt);
-
-    const deployedAddress = receipt.logs[0].address;
-    console.log('Deployed GameBank Contract Address:', deployedAddress);
-    // get the provider
-    // const providerUrl = this.configService.get<string>('PROVIDER_URL');
-    // // get the pk
-    // const pk = this.configService.get<string>('WALLET_KEY');
-    // if (!pk) {
-    //   throw new Error('Private key is missing from environment variables');
-    // }
-    // const formattedPk = pk.startsWith('0x') ? pk : '0x' + pk;
-    //
-    // const provider = new ethers.JsonRpcProvider(providerUrl);
-    // const wallet = new ethers.Wallet(formattedPk, provider);
-    //
-    // const factory = new ethers.ContractFactory(
-    //   BankContract.abi,
-    //   BankContract.bytecode.object,
-    //   wallet,
-    // );
-    //
-    // const f = await factory.deploy(
-    //   numberOfPlayers,
-    //   nftContractAddress,
-    //   '0x4A30f459F694876A5c6b726995274076dcD21E67',
-    // );
-    //
-    // await f.waitForDeployment();
-    // console.log('target is ', f.target);
-    return 'f.target as string';
+    gameToken: string,
+  ): Promise<string> => {
+    return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
   };
 
   getAContractInstance = (contractAddress: string) => {
