@@ -45,7 +45,7 @@ export class Game {
   })
   createdAt!: Date;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', default: '' })
   currentTurn!: string;
 
   @Column({ type: 'jsonb', name: 'player_position', nullable: true })
