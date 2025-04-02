@@ -32,12 +32,12 @@ export class BlockchainService {
     this.gameToken = configService.get<string>('GAME_TOKEN');
   }
 
-  createSmartAccount = async (userId: number) => {
+  async createSmartAccount(userId: number) {
     const newSmartAccount = await this.viemService.account(userId);
     const userAddress: string = newSmartAccount.address;
 
     return userAddress;
-  };
+  }
 
   deployBankContract = async (numberOfPlayers: number): Promise<string> => {
     // using libraries like ethers or viem to deploy the contract
