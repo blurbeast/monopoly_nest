@@ -62,9 +62,9 @@ describe('PlayerService', () => {
 
   it('player should be registered, smart account address should be assigned', async () => {
     const createPlayerDto = new CreatePlayerDto();
-    createPlayerDto.username = 'test131';
+    createPlayerDto.username = 'test171';
     createPlayerDto.playerAddress =
-      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab46';
+      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab66';
 
     const createPlayerResponse = await service.createPlayer(createPlayerDto);
 

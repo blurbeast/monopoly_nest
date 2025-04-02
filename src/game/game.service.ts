@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Game, GameStatus } from './game.entity';
 import { Repository } from 'typeorm';
-import { BlockchainService } from 'src/blockchain/blockchain.service';
+import { BlockchainService } from '../blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
 import { PlayerService } from '../player/player.service';
+import { Player } from '../player/player.entity';
 
 @Injectable()
 export class GameService {
@@ -22,7 +23,7 @@ export class GameService {
     const foundPlayer =
       await this.playerService.getPlayerWithPlayerAddress(userAddress);
 
-    if (foundPlayer === null) {
+    if (!foundPlayer) {
       throw new Error('could not find player');
     }
     // ensure the number of players does not exceed 9
@@ -35,14 +36,20 @@ export class GameService {
       await this.blockchainService.deployBankContract(numberOfPlayer);
 
     // create game room;
-    const roomId: string = this.assignRoomId();
+    // const roomId: string = this.assignRoomId();
+    const roomId: string = '22222';
 
     const game = plainToInstance(Game, {
       gameRoomId: roomId,
       bankContractAddress: bankAddress,
     });
-    game.players.push(foundPlayer);
+    console.log('player :::', foundPlayer);
+    console.log('game :::', game);
+    const players: Player[] = [];
+    players.push(foundPlayer);
+    game.players = players;
     game.numberOfPlayers = numberOfPlayer;
+    console.log('game after push and all ::', game);
 
     const savedGame = await this.gameRepository.save(game);
 
@@ -55,7 +62,7 @@ export class GameService {
   ): Promise<string> => {
     // check if the gameId is valid
     const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (!game ) {
+    if (!game) {
       throw new Error('invalid game id provided');
     }
 

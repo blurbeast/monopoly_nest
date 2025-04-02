@@ -114,11 +114,11 @@ export class PlayerService {
   }
 
   private createPlayerResponse = (player: Player): CreatePlayerResponseDto => {
-    return new CreatePlayerResponseDto(
-      player.username,
-      player.playerAddress,
-      player.smartAccountAddress,
-    );
+    return plainToInstance(CreatePlayerResponseDto, {
+      username: player.username,
+      playerAddress: player.playerAddress,
+      smartAccountAddress: player.smartAccountAddress,
+    });
   };
 
   // expose the api for this

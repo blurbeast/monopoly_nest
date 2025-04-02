@@ -1,4 +1,4 @@
-import { Player } from 'src/player/player.entity';
+import { Player } from '../player/player.entity';
 import {
   Column,
   CreateDateColumn,
@@ -26,7 +26,7 @@ export class Game {
   @Column({ type: 'boolean', default: false })
   hasStarted!: boolean;
 
-  @Column({ unique: true, type: 'varchar', length: 4 })
+  @Column({ unique: true, type: 'varchar', length: 5 })
   gameRoomId!: string;
 
   @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
@@ -45,7 +45,7 @@ export class Game {
   })
   createdAt!: Date;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'varchar' })
   currentTurn!: string;
 
   @Column({ type: 'jsonb', name: 'player_position', nullable: true })
