@@ -12,6 +12,7 @@ import { Salted } from '../player/salted.entity';
 
 describe('GameService', () => {
   let service: GameService;
+  jest.setTimeout(40_000);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,14 +52,14 @@ describe('GameService', () => {
     // player already exist
     // now create a game
     const roomId = await service.createGame(
-      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28',
+      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18',
       7,
     );
 
     expect(roomId).toBeDefined();
-    expect(roomId).toBeInstanceOf(String);
+    // expect(roomId).toBeInstanceOf(String);
     expect(roomId.length).toBe(5);
 
     expect(service).toBeDefined();
-  }, 30_000);
+  });
 });

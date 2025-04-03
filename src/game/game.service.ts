@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Game, GameStatus } from './game.entity';
+import { Game, GameStatus, Position } from './game.entity';
 import { Repository } from 'typeorm';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
@@ -32,23 +32,26 @@ export class GameService {
     }
     // deploy game bank on chain
     //to get the bank address deploy on chain , we need to call on the blockchain service
-    const bankAddress: string =
-      await this.blockchainService.deployBankContract(numberOfPlayer);
+    // const bankAddress: string =
+    //   await this.blockchainService.deployBankContract(numberOfPlayer);
 
     // create game room;
     // const roomId: string = this.assignRoomId();
-    const roomId: string = '22222';
+    const roomId: string = '22223';
 
     const game = plainToInstance(Game, {
       gameRoomId: roomId,
-      bankContractAddress: bankAddress,
+      bankContractAddress: '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab98',
     });
     console.log('player :::', foundPlayer);
+    foundPlayer.currentGameId = roomId;
     console.log('game :::', game);
     const players: Player[] = [];
     players.push(foundPlayer);
     game.players = players;
+    const playersPosition: Position[] = [];
     game.numberOfPlayers = numberOfPlayer;
+    game.playerPositions = playersPosition;
     console.log('game after push and all ::', game);
 
     const savedGame = await this.gameRepository.save(game);

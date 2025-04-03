@@ -13,7 +13,7 @@ export enum GameStatus {
   ENDED, // 2
 }
 
-class Position {
+export class Position {
   player!: string;
   spot!: number;
 }

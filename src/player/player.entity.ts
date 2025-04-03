@@ -25,8 +25,8 @@ export class Player {
   @Column({ unique: true, type: 'int' })
   userSalt!: number;
 
-  @Column({ nullable: true, type: 'int' })
-  currentGameId!: number;
+  @Column({ nullable: true, type: 'varchar' })
+  currentGameId!: string;
 
   @Column({
     name: 'player_joined_at',
