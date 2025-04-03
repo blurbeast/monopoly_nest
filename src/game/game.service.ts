@@ -6,6 +6,7 @@ import { BlockchainService } from '../blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
 import { PlayerService } from '../player/player.service';
 import { Player } from '../player/player.entity';
+import axios from 'axios';
 
 @Injectable()
 export class GameService {
@@ -32,27 +33,26 @@ export class GameService {
     }
     // deploy game bank on chain
     //to get the bank address deploy on chain , we need to call on the blockchain service
-    // const bankAddress: string =
-    //   await this.blockchainService.deployBankContract(numberOfPlayer);
+    const bankAddress: string =
+      await this.blockchainService.deployBankContract(numberOfPlayer);
 
     // create game room;
-    // const roomId: string = this.assignRoomId();
-    const roomId: string = '22223';
+    const roomId: string = await this.assignRoomId();
 
     const game = plainToInstance(Game, {
       gameRoomId: roomId,
-      bankContractAddress: '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab98',
+      bankContractAddress: bankAddress,
     });
-    console.log('player :::', foundPlayer);
+    // console.log('player :::', foundPlayer);
     foundPlayer.currentGameId = roomId;
-    console.log('game :::', game);
-    const players: Player[] = [];
-    players.push(foundPlayer);
+    // console.log('game :::', game);
+    const players: Player[] = [foundPlayer];
+    // players.push(foundPlayer);
     game.players = players;
     const playersPosition: Position[] = [];
     game.numberOfPlayers = numberOfPlayer;
     game.playerPositions = playersPosition;
-    console.log('game after push and all ::', game);
+    // console.log('game after push and all ::', game);
 
     const savedGame = await this.gameRepository.save(game);
 
@@ -160,26 +160,29 @@ export class GameService {
     return `next player :: ${game.players[nextIndex].username}`;
   };
 
-  private assignRoomId(): string {
-    let roomId: string = this.generateRoomId();
+  private async assignRoomId(): Promise<string> {
+    let roomId: string = await this.generateRoomId();
     while (
-      this.gameRepository.findOne({
+      await this.gameRepository.findOne({
         where: {
           gameRoomId: roomId,
         },
-      }) !== null
+      })
     ) {
-      roomId = this.generateRoomId();
+      roomId = await this.generateRoomId();
     }
     return roomId;
   }
 
-  private generateRoomId(): string {
-    const ids: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let roomId: string = '';
-    for (let i = 0; i < 5; i++) {
-      roomId += ids.charAt(Math.floor(Math.random() * ids.length));
-    }
-    return roomId;
+  private async generateRoomId(): Promise<string> {
+    const response = await axios.get(
+      'https://www.random.org/strings/?num=1&len=5&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new',
+    );
+
+    const result = JSON.stringify(response.data).slice(1, 6).trim();
+
+    console.log('generated randomness ::: ', result);
+
+    return result;
   }
 }

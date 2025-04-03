@@ -5,9 +5,15 @@ import { GameService } from './game.service';
 import { GameController } from './game.controller';
 import { BlockchainModule } from 'src/blockchain/blockchain.module';
 import { PlayerModule } from 'src/player/player.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Game]), BlockchainModule, PlayerModule],
+  imports: [
+    TypeOrmModule.forFeature([Game]),
+    BlockchainModule,
+    PlayerModule,
+    HttpModule,
+  ],
   providers: [GameService],
   controllers: [GameController],
   exports: [GameService],
