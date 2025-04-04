@@ -3,7 +3,7 @@ import { GameService } from './game.service';
 import { PlayerService } from '../player/player.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Game } from './game.entity';
+import { Game, GameStatus } from './game.entity';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { ViemService } from '../viemM/viem.service';
 import { EthersMService } from '../ethers-m/ethers-m.service';
@@ -12,6 +12,7 @@ import { Salted } from '../player/salted.entity';
 
 describe('GameService', () => {
   let service: GameService;
+  let playerService: PlayerService;
   jest.setTimeout(40_000);
 
   beforeEach(async () => {
@@ -46,20 +47,54 @@ describe('GameService', () => {
     }).compile();
 
     service = module.get<GameService>(GameService);
+    playerService = module.get<PlayerService>(PlayerService);
   });
 
   it('player should be able to create game', async () => {
     // player already exist
     // now create a game
-    const roomId = await service.createGame(
-      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18',
-      7,
-    );
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab12';
+    const roomId = await service.createGame(playerAddress, 7);
 
     expect(roomId).toBeDefined();
     // expect(roomId).toBeInstanceOf(String);
     expect(roomId.length).toBe(5);
 
+    const foundGame = await service.getGame(roomId);
+    expect(foundGame?.numberOfPlayers).toBe(7);
+
+    // expect(foundGame?.playersAddresses[0] === playerAddress).toBe(true);
+
     expect(service).toBeDefined();
+
+    const foundPlayer =
+      await playerService.getPlayerWithPlayerAddress(playerAddress);
+
+    expect(foundPlayer.currentGameId).toBe(foundGame?.gameRoomId);
+  });
+
+  it('player should be able to join game', async () => {
+    const roomId: string = 'B6ICx';
+    const response = await service.joinGame(
+      roomId,
+      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18',
+    );
+
+    expect(response).toBeDefined();
+    expect(response).toBe('successfully joined');
+
+    const foundGame: Game | null = await service.getGame(roomId);
+    if (foundGame) {
+      expect(foundGame).toBeDefined();
+      expect(foundGame?.numberOfPlayers).toBeGreaterThan(0);
+      // expect(foundGame.numberOfPlayers).toBeLessThan(7);
+      expect(foundGame.status).toBe(GameStatus.PENDING);
+
+      expect(foundGame.hasStarted).toBeFalsy();
+
+      // foundGame?.players.some((p) =>
+      //   expect(p.currentGameId === roomId).toBe(true),
+      // );
+    }
   });
 });

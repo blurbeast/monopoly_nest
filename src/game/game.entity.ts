@@ -30,7 +30,7 @@ export class Game {
   gameRoomId!: string;
 
   @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
-  players!: Player[];
+  playersAddresses!: string[];
 
   @Column({ type: 'int' })
   numberOfPlayers!: number;

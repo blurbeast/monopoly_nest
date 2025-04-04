@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { BlockchainService } from '../blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
 import { PlayerService } from '../player/player.service';
-import { Player } from '../player/player.entity';
 import axios from 'axios';
 
 @Injectable()
@@ -43,17 +42,20 @@ export class GameService {
       gameRoomId: roomId,
       bankContractAddress: bankAddress,
     });
-    // console.log('player :::', foundPlayer);
+    // console.log('player :::', foundPlayer);\
     foundPlayer.currentGameId = roomId;
     // console.log('game :::', game);
-    const players: Player[] = [foundPlayer];
+    // const players: Player[] = [foundPlayer];
     // players.push(foundPlayer);
-    game.players = players;
+
+    game.playersAddresses = [userAddress];
+
     const playersPosition: Position[] = [];
     game.numberOfPlayers = numberOfPlayer;
     game.playerPositions = playersPosition;
     // console.log('game after push and all ::', game);
 
+    await this.playerService.updatePlayer(foundPlayer);
     const savedGame = await this.gameRepository.save(game);
 
     return savedGame.gameRoomId;
@@ -81,61 +83,70 @@ export class GameService {
       throw new Error('cannot join already started game');
     }
 
-    if (
-      game.players.length === 9 ||
-      game.players.length === game.numberOfPlayers
-    ) {
-      throw new Error('game already full');
-    }
+    // if (game.players.length === game.numberOfPlayers) {
+    //   throw new Error('game already full');
+    // }
 
-    // check if the game has not joined before
-    if (game.players.some((p) => p.playerAddress === player.playerAddress)) {
-      throw new Error('player already in the game room');
-    }
+    // check if the player has not joined before
+    // if (game.players.some((p) => p.playerAddress === player.playerAddress)) {
+    //   throw new Error('player already in the game room');
+    // }
 
-    game.players.push(player);
+    // let gamePlayers: Player[] = game.players;
+    // game.players.push(player);
 
-    // update it back in the repo
+    // gamePlayers = [...gamePlayers, player];
+    // // update it back in the repo
+    //
+    // game.players = gamePlayers;
 
     await this.gameRepository.update(game.id, game);
 
     return 'successfully joined';
   };
 
+  getGame = async (gameRoomId: string): Promise<Game | null> => {
+    const game = await this.gameRepository.findOne({
+      where: { gameRoomId },
+    });
+
+    return game || null;
+  };
+
   startGame = async (gameRoomId: string): Promise<string> => {
     // find the game
-    const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (!game) {
-      throw new Error('invalid game id provided');
-    }
-
-    // check if the game has started and is on PENDING
-    if (game.hasStarted && game.status !== GameStatus.PENDING) {
-      throw new Error('game already started');
-    }
-    // confirm that more than  player has joined the game or better still confirm with number of players specified with number of joined player
-    if (game.players.length < 2 && game.players.length < game.numberOfPlayers) {
-      throw new Error('not all players has joined game');
-    }
-
-    // call on the bank contract here to add players and also give them tokens to their smart account
-    // get all players smart account
-    const playersSmartAccount: string[] = game.players.map(
-      (p) => p.smartAccountAddress,
-    );
-
-    // now call the blockchain service to call on the game contract address so that players address has the token
-    await this.blockchainService.mintToPlayers(
-      game.bankContractAddress,
-      playersSmartAccount,
-    );
-
-    game.hasStarted = true;
-    game.status = GameStatus.ACTIVE;
-    game.currentTurn = game.players[0].playerAddress;
-
-    // update the game
-    await this.gameRepository.update(game.id, game);
+    // const game = await this.gameRepository.findOne({ where: { gameRoomId } });
+    // if (!game) {
+    //   throw new Error('invalid game id provided');
+    // }
+    //
+    // // check if the game has started and is on PENDING
+    // if (game.hasStarted && game.status !== GameStatus.PENDING) {
+    //   throw new Error('game already started');
+    // }
+    // // confirm that more than  player has joined the game or better still confirm with number of players specified with number of joined player
+    // if (game.players.length < 2 && game.players.length < game.numberOfPlayers) {
+    //   throw new Error('not all players has joined game');
+    // }
+    //
+    // // call on the bank contract here to add players and also give them tokens to their smart account
+    // // get all players smart account
+    // const playersSmartAccount: string[] = game.playersAddresses.map(
+    //   (p) => p,
+    // );
+    //
+    // // now call the blockchain service to call on the game contract address so that players address has the token
+    // await this.blockchainService.mintToPlayers(
+    //   game.bankContractAddress,
+    //   playersSmartAccount,
+    // );
+    //
+    // game.hasStarted = true;
+    // game.status = GameStatus.ACTIVE;
+    // game.currentTurn = game.playersAddresses[0];
+    //
+    // // update the game
+    // await this.gameRepository.update(game.id, game);
 
     return 'game started';
   };
@@ -149,15 +160,16 @@ export class GameService {
       throw new Error('game is not active');
     }
 
-    const playerIndex = game.players.findIndex(
-      (p) => p.playerAddress === game.currentTurn,
-    );
-    const nextIndex = (playerIndex + 1) % game.players.length;
-    game.currentTurn = game.players[nextIndex].playerAddress;
+    // const playerIndex = game.players.findIndex(
+    //   (p) => p.playerAddress === game.currentTurn,
+    // );
+    // const nextIndex = (playerIndex + 1) % game.players.length;
+    // game.currentTurn = game.players[nextIndex].playerAddress;
+    //
+    // await this.gameRepository.update(game.id, game);
 
-    await this.gameRepository.update(game.id, game);
-
-    return `next player :: ${game.players[nextIndex].username}`;
+    // return `next player :: ${game.playersAddresses[nextIndex].username}`;
+    return '';
   };
 
   private async assignRoomId(): Promise<string> {

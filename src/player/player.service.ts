@@ -121,6 +121,15 @@ export class PlayerService {
     });
   };
 
+  updatePlayer = async (player: Player) => {
+    //get player
+    const foundPlayer = await this.getPlayer('username', player.username);
+    await this.playerRepository.update(foundPlayer.id, {
+      ...foundPlayer,
+      currentGameId: player.currentGameId,
+    });
+  };
+
   // expose the api for this
   async getPlayerWithUsername(username: string): Promise<Player> {
     return this.getPlayer('username', username);
