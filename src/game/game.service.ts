@@ -23,11 +23,9 @@ export class GameService {
     const foundPlayer =
       await this.playerService.getPlayerWithPlayerAddress(userAddress);
 
-    if (!foundPlayer) {
-      throw new Error('could not find player');
-    }
+    console.log(foundPlayer);
 
-    if (foundPlayer.currentGameId !== '') {
+    if (foundPlayer.currentGameId !== null) {
       throw new Error('player already in a game');
     }
     // ensure the number of players does not exceed 9
@@ -48,11 +46,13 @@ export class GameService {
     });
     // console.log('player :::', foundPlayer);\
     foundPlayer.currentGameId = roomId;
+    const mappedObj = new Map([[foundPlayer.playerAddress, true]]);
+    game.playerToAddress = Object.fromEntries(mappedObj);
     // console.log('game :::', game);
     // const players: Player[] = [foundPlayer];
     // players.push(foundPlayer);
 
-    game.playersAddresses = [userAddress];
+    // game.playersAddresses = [userAddress];
 
     const playersPosition: Position[] = [];
     game.numberOfPlayers = numberOfPlayer;
@@ -70,51 +70,57 @@ export class GameService {
     userAddress: string,
   ): Promise<string> => {
     // check if the gameId is valid
-    const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (!game) {
-      throw new Error('invalid game id provided');
-    }
+    const game = await this.getGame(gameRoomId);
 
     // find player too
     const player =
       await this.playerService.getPlayerWithPlayerAddress(userAddress);
 
-    if (!player) {
-      throw new Error('could not locate player with the specified address');
-    }
-
     if (game.hasStarted) {
       throw new Error('cannot join already started game');
     }
 
-    // if (game.players.length === game.numberOfPlayers) {
-    //   throw new Error('game already full');
+    const newlyMapped = new Map(Object.entries(game.playerToAddress));
+
+    console.log(newlyMapped);
+
+    if (newlyMapped.get(player.playerAddress)) {
+      throw new Error('player already in this game');
+    }
+
+    newlyMapped.set(player.playerAddress, true);
+
+    console.log('after mapped::', newlyMapped);
+
+    game.playerToAddress = Object.fromEntries(newlyMapped);
+
+    // console.log('players joined ::: ', game.playersAddresses);
+    // const hasJoined = game.playersAddresses.some((p) => p === player.playerAddress);
+    // if (hasJoined) {
+    //   throw new Error('player already in this game');
     // }
 
-    // check if the player has not joined before
-    // if (game.players.some((p) => p.playerAddress === player.playerAddress)) {
-    //   throw new Error('player already in the game room');
-    // }
+    // now we check the number of players in the addresses to the number of registered players
 
-    // let gamePlayers: Player[] = game.players;
-    // game.players.push(player);
+    // now we need to check if a player has already joined before now
 
-    // gamePlayers = [...gamePlayers, player];
-    // // update it back in the repo
-    //
-    // game.players = gamePlayers;
-
+    // update the player has joined the game via calling the player service
+    player.currentGameId = game.gameRoomId;
+    await this.playerService.updatePlayer(player);
     await this.gameRepository.update(game.id, game);
 
     return 'successfully joined';
   };
 
-  getGame = async (gameRoomId: string): Promise<Game | null> => {
+  getGame = async (gameRoomId: string): Promise<Game> => {
     const game = await this.gameRepository.findOne({
       where: { gameRoomId },
     });
 
-    return game || null;
+    if (!game) {
+      throw new Error('invalid game room id provided ');
+    }
+    return game;
   };
 
   startGame = async (gameRoomId: string): Promise<string> => {

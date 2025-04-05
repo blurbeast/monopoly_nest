@@ -1,9 +1,8 @@
-import { Player } from '../player/player.entity';
+// import { Player } from '../player/player.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -29,8 +28,17 @@ export class Game {
   @Column({ unique: true, type: 'varchar', length: 5 })
   gameRoomId!: string;
 
-  @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
-  playersAddresses!: string[];
+  // // @OneToMany(() => Player, (player) => player.currentGameId, { cascade: true })
+  // @Column({
+  //   name: 'playersAddresses',
+  //   array: true,
+  // })
+  // playersAddresses!: string[];
+  @Column({
+    type: 'jsonb',
+    default: () => "'{}'::jsonb",
+  })
+  playerToAddress!: { [key: string]: boolean };
 
   @Column({ type: 'int' })
   numberOfPlayers!: number;
