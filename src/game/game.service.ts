@@ -44,20 +44,13 @@ export class GameService {
       gameRoomId: roomId,
       bankContractAddress: bankAddress,
     });
-    // console.log('player :::', foundPlayer);\
     foundPlayer.currentGameId = roomId;
     const mappedObj = new Map([[foundPlayer.playerAddress, true]]);
     game.playerToAddress = Object.fromEntries(mappedObj);
-    // console.log('game :::', game);
-    // const players: Player[] = [foundPlayer];
-    // players.push(foundPlayer);
-
-    // game.playersAddresses = [userAddress];
 
     const playersPosition: Position[] = [];
     game.numberOfPlayers = numberOfPlayer;
     game.playerPositions = playersPosition;
-    // console.log('game after push and all ::', game);
 
     await this.playerService.updatePlayer(foundPlayer);
     const savedGame = await this.gameRepository.save(game);
@@ -81,32 +74,19 @@ export class GameService {
     }
 
     const newlyMapped = new Map(Object.entries(game.playerToAddress));
+    // now we check the number of players in the addresses to the number of registered players
     if (newlyMapped.size === game.numberOfPlayers) {
       throw new Error('game room already full');
     }
 
-    console.log(newlyMapped);
-
+    // now we need to check if a player has already joined before now
     if (newlyMapped.get(player.playerAddress)) {
       throw new Error('player already in this game');
     }
 
     newlyMapped.set(player.playerAddress, true);
 
-    console.log('after mapped::', newlyMapped);
-
     game.playerToAddress = Object.fromEntries(newlyMapped);
-
-    // console.log('players joined ::: ', game.playersAddresses);
-    // const hasJoined = game.playersAddresses.some((p) => p === player.playerAddress);
-    // if (hasJoined) {
-    //   throw new Error('player already in this game');
-    // }
-
-    // now we check the number of players in the addresses to the number of registered players
-
-    // now we need to check if a player has already joined before now
-
     // update the player has joined the game via calling the player service
     player.currentGameId = game.gameRoomId;
     await this.playerService.updatePlayer(player);
@@ -129,9 +109,7 @@ export class GameService {
   startGame = async (gameRoomId: string): Promise<string> => {
     // find the game
     // const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    // if (!game) {
-    //   throw new Error('invalid game id provided');
-    // }
+
     //
     // // check if the game has started and is on PENDING
     // if (game.hasStarted && game.status !== GameStatus.PENDING) {

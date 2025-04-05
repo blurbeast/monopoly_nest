@@ -15,8 +15,10 @@ import { toEcdsaKernelSmartAccount } from 'permissionless/accounts';
 import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
-import * as BankContract from '../blockchain/abis/BankContract.json';
 import { ConfigService } from '@nestjs/config';
+
+import * as BankContract from '../blockchain/abis/BankContract.json';
+import * as GameToken from '../blockchain/abis/GameTokenAbi.json';
 
 dotenv.config();
 
@@ -82,18 +84,19 @@ export class ViemService {
     });
   };
 
-  deployAContract = async (
-    numberOfPlayers: number,
-    nftContractAddress: string,
-    gameToken: string,
-  ): Promise<string> => {
-    return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
-  };
+  // deployAContract = async (
+  //   numberOfPlayers: number,
+  //   nftContractAddress: string,
+  //   gameToken: string,
+  // ): Promise<string> => {
+  //   return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
+  // };
 
-  getAContractInstance = (contractAddress: string) => {
+  getAContractInstance = (contractAddress: string, action: string) => {
+    const abi = action === 'bank' ? BankContract.abi : GameToken.abi;
     return getContract({
       address: getAddress(contractAddress),
-      abi: BankContract.abi,
+      abi,
       client: this._createWallet(),
     });
   };
