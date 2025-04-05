@@ -73,12 +73,18 @@ describe('GameService', () => {
     expect(foundPlayer.currentGameId).toBe(foundGame?.gameRoomId);
   });
 
+  it('a player in an existing game room cannot create a new game', async () => {
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18';
+
+    await expect(service.createGame(playerAddress, 5)).rejects.toThrow(
+      'player already in a game',
+    );
+  });
+
   it('player should be able to join game', async () => {
     const roomId: string = 'B6ICx';
-    const response = await service.joinGame(
-      roomId,
-      '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18',
-    );
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18';
+    const response = await service.joinGame(roomId, playerAddress);
 
     expect(response).toBeDefined();
     expect(response).toBe('successfully joined');
@@ -92,6 +98,10 @@ describe('GameService', () => {
 
       expect(foundGame.hasStarted).toBeFalsy();
 
+      const foundPlayer: Player =
+        await playerService.getPlayerWithPlayerAddress(playerAddress);
+
+      expect(foundPlayer.currentGameId).toBe(foundGame?.gameRoomId);
       // foundGame?.players.some((p) =>
       //   expect(p.currentGameId === roomId).toBe(true),
       // );

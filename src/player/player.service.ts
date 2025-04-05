@@ -124,7 +124,8 @@ export class PlayerService {
   updatePlayer = async (player: Player) => {
     //get player
     const foundPlayer = await this.getPlayer('username', player.username);
-    await this.playerRepository.update(foundPlayer.id, {
+    // update player with a spread operator and update the field to update
+    await this.playerRepository.save({
       ...foundPlayer,
       currentGameId: player.currentGameId,
     });

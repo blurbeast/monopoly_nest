@@ -26,6 +26,10 @@ export class GameService {
     if (!foundPlayer) {
       throw new Error('could not find player');
     }
+
+    if (foundPlayer.currentGameId !== '') {
+      throw new Error('player already in a game');
+    }
     // ensure the number of players does not exceed 9
     if (numberOfPlayer > 9) {
       throw new Error('number of players cannot exceed 9');
