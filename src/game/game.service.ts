@@ -81,6 +81,9 @@ export class GameService {
     }
 
     const newlyMapped = new Map(Object.entries(game.playerToAddress));
+    if (newlyMapped.size === game.numberOfPlayers) {
+      throw new Error('game room already full');
+    }
 
     console.log(newlyMapped);
 

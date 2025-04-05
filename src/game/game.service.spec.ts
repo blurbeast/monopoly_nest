@@ -62,12 +62,6 @@ describe('GameService', () => {
 
     const foundGame = await service.getGame(roomId);
     expect(foundGame?.numberOfPlayers).toBe(7);
-    const playerAddressToBool = Object.entries(foundGame.playerToAddress,
-    );
-
-    // playerAddressToBool.some(p = )
-
-    // expect(foundGame?.playersAddresses[0] === playerAddress).toBe(true);
 
     expect(service).toBeDefined();
 
@@ -130,6 +124,15 @@ describe('GameService', () => {
 
     await expect(service.joinGame(gameId, secondPlayer)).rejects.toThrow(
       'player already in this game',
+    );
+  });
+
+  it('game cannot allow more than the number of said players', async () => {
+    const gameId: string = 'u22Wy';
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab66';
+
+    await expect(service.joinGame(gameId, playerAddress)).rejects.toThrow(
+      'game room already full',
     );
   });
 });
