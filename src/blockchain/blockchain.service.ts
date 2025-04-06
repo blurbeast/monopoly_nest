@@ -76,21 +76,20 @@ export class BlockchainService {
     bankContractAddress: string,
     playersSmartAccount: string[],
   ) {
-    const bankContract = this.viemService.getAContractInstance(
+    const bankContract = this.viemService.getBankContractInstance(
       bankContractAddress,
       'bank',
     );
     // write to the contract
-    await bankContract.write.mintTo(playersSmartAccount, 1500);
+    await bankContract.write.mints([playersSmartAccount, 1500]);
   }
 
   async mintToBank(numberOfPlayers: number, bankContractAddress: string) {
-    const gameTokenContract = this.viemService.getAContractInstance(
-      bankContractAddress,
-      '',
-    );
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    await gameTokenContract.write.mint(numberOfPlayers, bankContractAddress);
+    const gameToken: string = '0x4A30f459F694876A5c6b726995274076dcD21E67';
+
+    const gameTokenContract =
+      this.viemService.getGameTokenContractInstance(gameToken);
+
+    await gameTokenContract.write.mint([numberOfPlayers, bankContractAddress]);
   }
 }

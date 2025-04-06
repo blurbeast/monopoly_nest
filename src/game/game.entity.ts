@@ -38,7 +38,9 @@ export class Game {
     type: 'jsonb',
     default: () => "'{}'::jsonb",
   })
-  playerToAddress!: { [key: string]: boolean };
+  playerToAddress!: {
+    [key: string]: { smartAccountAddress: string; joined: boolean };
+  };
 
   @Column({ type: 'int' })
   numberOfPlayers!: number;

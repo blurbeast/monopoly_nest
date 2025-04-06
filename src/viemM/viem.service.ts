@@ -92,11 +92,18 @@ export class ViemService {
   //   return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
   // };
 
-  getAContractInstance = (contractAddress: string, action: string) => {
-    const abi = action === 'bank' ? BankContract.abi : GameToken.abi;
+  getBankContractInstance = (contractAddress: string, action: string) => {
     return getContract({
       address: getAddress(contractAddress),
-      abi,
+      abi: BankContract.abi,
+      client: this._createWallet(),
+    });
+  };
+
+  getGameTokenContractInstance = (contractAddress: string) => {
+    return getContract({
+      address: getAddress(contractAddress),
+      abi: GameToken.abi,
       client: this._createWallet(),
     });
   };

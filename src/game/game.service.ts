@@ -45,7 +45,12 @@ export class GameService {
       bankContractAddress: bankAddress,
     });
     foundPlayer.currentGameId = roomId;
-    const mappedObj = new Map([[foundPlayer.playerAddress, true]]);
+    const mappedObj = new Map([
+      [
+        foundPlayer.playerAddress,
+        { smartAccountAddress: foundPlayer.smartAccountAddress, joined: true },
+      ],
+    ]);
     game.playerToAddress = Object.fromEntries(mappedObj);
 
     const playersPosition: Position[] = [];
@@ -84,7 +89,10 @@ export class GameService {
       throw new Error('player already in this game');
     }
 
-    newlyMapped.set(player.playerAddress, true);
+    newlyMapped.set(player.playerAddress, {
+      smartAccountAddress: player.smartAccountAddress,
+      joined: true,
+    });
 
     game.playerToAddress = Object.fromEntries(newlyMapped);
     // update the player has joined the game via calling the player service
@@ -108,36 +116,43 @@ export class GameService {
 
   startGame = async (gameRoomId: string): Promise<string> => {
     // find the game
-    // const game = await this.gameRepository.findOne({ where: { gameRoomId } });
+    const game: Game = await this.getGame(gameRoomId);
 
-    //
-    // // check if the game has started and is on PENDING
-    // if (game.hasStarted && game.status !== GameStatus.PENDING) {
-    //   throw new Error('game already started');
-    // }
-    // // confirm that more than  player has joined the game or better still confirm with number of players specified with number of joined player
-    // if (game.players.length < 2 && game.players.length < game.numberOfPlayers) {
-    //   throw new Error('not all players has joined game');
-    // }
-    //
-    // // call on the bank contract here to add players and also give them tokens to their smart account
-    // // get all players smart account
-    // const playersSmartAccount: string[] = game.playersAddresses.map(
-    //   (p) => p,
-    // );
-    //
-    // // now call the blockchain service to call on the game contract address so that players address has the token
+    // check if the game has started and is on PENDING
+    if (game.hasStarted && game.status !== GameStatus.PENDING) {
+      throw new Error('game already started');
+    }
+    // confirm that more than  player has joined the game or better still confirm with number of players specified with number of joined player
+    //get the size of the joined players
+    const allPlayers = new Map(Object.entries(game.playerToAddress));
+
+    if (allPlayers.size < game.numberOfPlayers) {
+      throw new Error('could not start game , not all players have joined ');
+    }
+
+    // call the player service
+    const playersAddresses = Array.from(allPlayers.values());
+    console.log('players addresses ::: ', playersAddresses);
+
+    const smartAddresses: string[] = [];
+
+    playersAddresses.forEach((playerAddress) => {
+      smartAddresses.push(playerAddress.smartAccountAddress);
+    });
+
+    console.log('smart addresses are ::: ', smartAddresses);
+
     // await this.blockchainService.mintToPlayers(
     //   game.bankContractAddress,
-    //   playersSmartAccount,
+    //   smartAddresses,
     // );
-    //
-    // game.hasStarted = true;
-    // game.status = GameStatus.ACTIVE;
-    // game.currentTurn = game.playersAddresses[0];
-    //
-    // // update the game
-    // await this.gameRepository.update(game.id, game);
+
+    game.hasStarted = true;
+    game.status = GameStatus.ACTIVE;
+    game.currentTurn = Array.from(allPlayers.keys())[0];
+
+    // update the game
+    await this.gameRepository.save(game);
 
     return 'game started';
   };

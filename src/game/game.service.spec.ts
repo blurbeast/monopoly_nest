@@ -54,14 +54,14 @@ describe('GameService', () => {
     // player already exist
     // now create a game
     const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab26';
-    const roomId = await service.createGame(playerAddress, 7);
+    const roomId = await service.createGame(playerAddress, 2);
 
     expect(roomId).toBeDefined();
     // expect(roomId).toBeInstanceOf(String);
     expect(roomId.length).toBe(5);
 
     const foundGame = await service.getGame(roomId);
-    expect(foundGame?.numberOfPlayers).toBe(7);
+    expect(foundGame?.numberOfPlayers).toBe(2);
 
     expect(service).toBeDefined();
 
@@ -72,7 +72,7 @@ describe('GameService', () => {
   });
 
   it('a player in an existing game room cannot create a new game', async () => {
-    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab12';
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab26';
 
     await expect(service.createGame(playerAddress, 5)).rejects.toThrow(
       'player already in a game',
@@ -80,7 +80,7 @@ describe('GameService', () => {
   });
 
   it('player should be able to join game', async () => {
-    const roomId: string = 'u22Wy';
+    const roomId: string = '0U1yn';
     const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab46';
     const response = await service.joinGame(roomId, playerAddress);
 
@@ -90,7 +90,7 @@ describe('GameService', () => {
     const foundGame: Game = await service.getGame(roomId);
     expect(foundGame).toBeDefined();
     expect(foundGame?.numberOfPlayers).toBeGreaterThan(0);
-    expect(foundGame.numberOfPlayers).toBe(7);
+    expect(foundGame.numberOfPlayers).toBe(2);
     expect(foundGame.status).toBe(GameStatus.PENDING);
     expect(foundGame.hasStarted).toBeFalsy();
 
@@ -134,5 +134,18 @@ describe('GameService', () => {
     await expect(service.joinGame(gameId, playerAddress)).rejects.toThrow(
       'game room already full',
     );
+  });
+
+  it('created game can be started ', async () => {
+    const gameId: string = '0U1yn';
+    const response = await service.startGame(gameId);
+
+    expect(response).toBeDefined();
+    expect(response).toBe('game started');
+
+    const foundGame: Game = await service.getGame(gameId);
+    expect(foundGame?.numberOfPlayers).toBe(2);
+    expect(foundGame.hasStarted).toBeTruthy();
+    expect(foundGame.status).toBe(GameStatus.ACTIVE);
   });
 });
