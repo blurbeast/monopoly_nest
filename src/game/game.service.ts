@@ -142,10 +142,10 @@ export class GameService {
 
     console.log('smart addresses are ::: ', smartAddresses);
 
-    // await this.blockchainService.mintToPlayers(
-    //   game.bankContractAddress,
-    //   smartAddresses,
-    // );
+    await this.blockchainService.mintToPlayers(
+      game.bankContractAddress,
+      smartAddresses,
+    );
 
     game.hasStarted = true;
     game.status = GameStatus.ACTIVE;
