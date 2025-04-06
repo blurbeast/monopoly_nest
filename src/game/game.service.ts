@@ -178,6 +178,10 @@ export class GameService {
     return '';
   };
 
+  playGame = async (gameRoomId: string) => {
+    const game: Game = await this.getGame(gameRoomId);
+  };
+
   private async assignRoomId(): Promise<string> {
     let roomId: string = await this.generateRoomId();
     while (
