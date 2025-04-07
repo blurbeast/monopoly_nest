@@ -53,7 +53,7 @@ describe('GameService', () => {
   it('player should be able to create game', async () => {
     // player already exist
     // now create a game
-    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab26';
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab28';
     const roomId = await service.createGame(playerAddress, 2);
 
     expect(roomId).toBeDefined();
@@ -80,8 +80,8 @@ describe('GameService', () => {
   });
 
   it('player should be able to join game', async () => {
-    const roomId: string = '0U1yn';
-    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab46';
+    const roomId: string = 'Z0nma';
+    const playerAddress: string = '0xA4744643f0EBaE10F58D4B5DD986594f1eb7ab18';
     const response = await service.joinGame(roomId, playerAddress);
 
     expect(response).toBeDefined();
@@ -137,7 +137,7 @@ describe('GameService', () => {
   });
 
   it('created game can be started ', async () => {
-    const gameId: string = '0U1yn';
+    const gameId: string = 'Z0nma';
     const response = await service.startGame(gameId);
 
     expect(response).toBeDefined();

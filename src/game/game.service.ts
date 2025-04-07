@@ -158,10 +158,8 @@ export class GameService {
   };
 
   nextTurn = async (gameRoomId: string): Promise<string> => {
-    const game = await this.gameRepository.findOne({ where: { gameRoomId } });
-    if (!game) {
-      throw new Error('invalid game id provided');
-    }
+    const game = await this.getGame(gameRoomId);
+
     if (!game.hasStarted || game.status !== GameStatus.ACTIVE) {
       throw new Error('game is not active');
     }
