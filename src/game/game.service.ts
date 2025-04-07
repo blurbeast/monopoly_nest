@@ -164,16 +164,20 @@ export class GameService {
       throw new Error('game is not active');
     }
 
-    // const playerIndex = game.players.findIndex(
-    //   (p) => p.playerAddress === game.currentTurn,
-    // );
-    // const nextIndex = (playerIndex + 1) % game.players.length;
-    // game.currentTurn = game.players[nextIndex].playerAddress;
-    //
-    // await this.gameRepository.update(game.id, game);
+    const allPlayers = new Map(Object.entries(game.playerToAddress));
+    const allPlayersArray = Array.from(allPlayers.keys());
+
+    const playerIndex: number = allPlayersArray.findIndex(
+      (p) => p === game.currentTurn,
+    );
+
+    const nextIndex = (playerIndex + 1) % allPlayersArray.length;
+    game.currentTurn = allPlayersArray[nextIndex];
+
+    await this.gameRepository.save(game);
 
     // return `next player :: ${game.playersAddresses[nextIndex].username}`;
-    return '';
+    return `next player is ${game.currentTurn}`;
   };
 
   playGame = async (gameRoomId: string) => {
