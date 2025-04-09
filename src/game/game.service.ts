@@ -180,9 +180,30 @@ export class GameService {
     return `next player is ${game.currentTurn}`;
   };
 
-  playGame = async (gameRoomId: string) => {
-    const game: Game = await this.getGame(gameRoomId);
+  payRent = async (
+    gamedId: string,
+    propertyId: string,
+    diceRolled: number,
+    playerAddress: string,
+  ) => {
+    // get game
+    const game: Game = await this.getGame(gamedId);
+    if (!game.hasStarted && game.status === GameStatus.PENDING) {
+      throw new Error('game is not active');
+    }
+
+    if (game.currentTurn !== playerAddress) {
+      throw new Error('not your turn');
+    }
+    // check if player has grant the bank contract to perform action on it behalf
+
+    // call on the blockchain service to perform action
+
   };
+
+  // playGame = async (gameRoomId: string) => {
+  //   const game: Game = await this.getGame(gameRoomId);
+  // };
 
   private async assignRoomId(): Promise<string> {
     let roomId: string = await this.generateRoomId();
