@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ViemService } from '../viemM/viem.service';
-import { encodeFunctionData, parseAbi } from 'viem';
+// import { encodeFunctionData, parseAbi } from 'viem';
 import { ConfigService } from '@nestjs/config';
 import { EthersMService } from '../ethers-m/ethers-m.service';
+import { EncodeFunctionDataReturnType } from 'viem/utils/abi/encodeFunctionData';
 
 @Injectable()
 export class BlockchainService {
-  // private playerContract: ethers.Contract;
-  // private entryPointContract: ethers.Contract;
-  // private readonly defaultWallet: ethers.Wallet;
-  // private readonly provider: ethers.JsonRpcProvider;
-  // private entryPointContractAddress: string;
   private readonly nftContractAddress: any;
   private readonly gameToken: any;
 
@@ -52,17 +48,13 @@ export class BlockchainService {
     );
   };
 
-  interactOnChain = async (target: string) => {
-    const encodedData = encodeFunctionData({
-      abi: parseAbi([
-        'function setCount(uint256 _value) external returns (uint256)',
-      ]),
-      functionName: 'setCount',
-      args: [BigInt(30100)],
-    });
-
+  interactOnChain = async (
+    target: string,
+    encodedData: EncodeFunctionDataReturnType,
+    playerIndex: number,
+  ) => {
     const response = await this.viemService.sendUserOperation(
-      3,
+      playerIndex,
       target,
       0,
       encodedData,
@@ -71,6 +63,14 @@ export class BlockchainService {
     console.log('responses ::: ', response);
     return response;
   };
+
+  // getPlayerBalanceInGameBank = async (playerAddress: string)
+
+  // get properties owned by a player in a bank
+  // getPropertiesByAPlayer = async (gameBankContractAddress: string, playerAddress: string) => {
+  //
+  // to create an object it would return
+  // };
 
   async mintToPlayers(
     bankContractAddress: string,

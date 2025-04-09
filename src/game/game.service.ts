@@ -6,6 +6,8 @@ import { BlockchainService } from '../blockchain/blockchain.service';
 import { plainToInstance } from 'class-transformer';
 import { PlayerService } from '../player/player.service';
 import axios from 'axios';
+import { Player } from '../player/player.entity';
+import { encodeFunctionData, getAddress, parseAbi } from 'viem';
 
 @Injectable()
 export class GameService {
@@ -198,12 +200,44 @@ export class GameService {
     // check if player has grant the bank contract to perform action on it behalf
 
     // call on the blockchain service to perform action
-
   };
 
   // playGame = async (gameRoomId: string) => {
   //   const game: Game = await this.getGame(gameRoomId);
   // };
+
+  // approve game bank contract
+  approveGameBankAddress = async (gameId: string, playerAddress: string) => {
+    const game = await this.getGame(gameId);
+    if (!game.hasStarted && game.status === GameStatus.PENDING) {
+      throw new Error('game is not active');
+    }
+
+    const player: Player =
+      await this.playerService.getPlayerWithPlayerAddress(playerAddress);
+
+    // call on the blockchain service to perform action via AA
+
+    // first encode the action
+    const encodedData = encodeFunctionData({
+      abi: parseAbi([
+        'function approve(address gameId, address owner, address spender) external',
+      ]),
+      functionName: 'approve',
+      args: [
+        getAddress(game.bankContractAddress),
+        getAddress(player.smartAccountAddress),
+        getAddress(game.bankContractAddress),
+      ],
+    });
+
+    // call on the blockchain interactOnChain function to perform action
+    await this.blockchainService.interactOnChain(
+      '',
+      encodedData,
+      player.userSalt,
+    );
+  };
 
   private async assignRoomId(): Promise<string> {
     let roomId: string = await this.generateRoomId();

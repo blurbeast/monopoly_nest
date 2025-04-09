@@ -8,7 +8,6 @@ import { GameModule } from './game/game.module';
 import { ViemModule } from './viemM/viem.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EthersMModule } from './ethers-m/ethers-m.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
