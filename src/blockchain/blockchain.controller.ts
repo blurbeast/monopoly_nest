@@ -7,6 +7,6 @@ export class BlockchainController {
 
   @Get(':target')
   async onChain(@Param('target') target: string): Promise<any> {
-    return await this.blockchainService.interactOnChain(target);
+    return await this.blockchainService.interactOnChain(target, '', '');
   }
 }

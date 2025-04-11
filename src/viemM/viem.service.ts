@@ -92,7 +92,7 @@ export class ViemService {
   //   return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
   // };
 
-  getBankContractInstance = (contractAddress: string, action: string) => {
+  getBankContractInstance = (contractAddress: string) => {
     return getContract({
       address: getAddress(contractAddress),
       abi: BankContract.abi,
