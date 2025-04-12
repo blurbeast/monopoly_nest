@@ -84,13 +84,13 @@ export class ViemService {
     });
   };
 
-  // deployAContract = async (
-  //   numberOfPlayers: number,
-  //   nftContractAddress: string,
-  //   gameToken: string,
-  // ): Promise<string> => {
-  //   return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
-  // };
+  deployAContract = async (
+    numberOfPlayers: number,
+    nftContractAddress: string,
+    gameToken: string,
+  ): Promise<string> => {
+    return `${numberOfPlayers} , ${nftContractAddress}, ${gameToken}`;
+  };
 
   getBankContractInstance = (contractAddress: string) => {
     return getContract({
@@ -99,7 +99,7 @@ export class ViemService {
       client: this._createWallet(),
     });
   };
-
+  //
   getGameTokenContractInstance = (contractAddress: string) => {
     return getContract({
       address: getAddress(contractAddress),

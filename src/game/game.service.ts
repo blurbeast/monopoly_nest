@@ -8,6 +8,7 @@ import { PlayerService } from '../player/player.service';
 import axios from 'axios';
 import { Player } from '../player/player.entity';
 import { encodeFunctionData, getAddress, parseAbi } from 'viem';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GameService {
@@ -15,6 +16,7 @@ export class GameService {
     @InjectRepository(Game) private readonly gameRepository: Repository<Game>,
     private readonly blockchainService: BlockchainService,
     private readonly playerService: PlayerService,
+    private readonly configService: ConfigService,
   ) {}
 
   createGame = async (
@@ -159,6 +161,13 @@ export class GameService {
     return 'game started';
   };
 
+  // getAllBankProperties = async (gameRoomId: string) => {
+  //   const game: Game = await this.getGame(gameRoomId);
+  //   const bankProperties = await this.blockchainService.getBankProperties(
+  //     game.bankContractAddress,
+  //   );
+  //   return bankProperties;
+  // };
   nextTurn = async (gameRoomId: string): Promise<string> => {
     const game = await this.getGame(gameRoomId);
 
@@ -206,6 +215,15 @@ export class GameService {
   //   const game: Game = await this.getGame(gameRoomId);
   // };
 
+  getGameBankProperties = async (gameRoomId: string) => {
+    const game: Game = await this.getGame(gameRoomId);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return await this.blockchainService.getBankProperties(
+      game.bankContractAddress,
+    );
+  };
+
   // approve game bank contract
   approveGameBankAddress = async (gameId: string, playerAddress: string) => {
     const game = await this.getGame(gameId);
@@ -232,8 +250,12 @@ export class GameService {
     });
 
     // call on the blockchain interactOnChain function to perform action
+    const gameTokenAddress = this.configService.get<string>('GAME_TOKEN');
+    if (!gameTokenAddress) {
+      throw new Error('invalid game token');
+    }
     await this.blockchainService.interactOnChain(
-      '',
+      gameTokenAddress,
       encodedData,
       player.userSalt,
     );

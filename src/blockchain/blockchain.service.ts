@@ -3,7 +3,19 @@ import { ViemService } from '../viemM/viem.service';
 // import { encodeFunctionData, parseAbi } from 'viem';
 import { ConfigService } from '@nestjs/config';
 import { EthersMService } from '../ethers-m/ethers-m.service';
-import { EncodeFunctionDataReturnType } from 'viem/utils/abi/encodeFunctionData';
+import {
+  ByteArray,
+  bytesToString,
+  EncodeFunctionDataReturnType,
+  Hex,
+} from 'viem';
+import {
+  BankProperty,
+  PropertyColors,
+  PropertyType,
+} from '../game/dto/BankProperty';
+import { BytesLike, ethers, randomBytes } from 'ethers';
+// import { EncodeFunctionDataReturnType } from 'viem/utils/abi/encodeFunctionData';
 
 @Injectable()
 export class BlockchainService {
@@ -76,20 +88,38 @@ export class BlockchainService {
     bankContractAddress: string,
     playersSmartAccount: string[],
   ) {
-    const bankContract = this.viemService.getBankContractInstance(
-      bankContractAddress,
-      'bank',
-    );
+    const bankContract =
+      this.viemService.getBankContractInstance(bankContractAddress);
     // write to the contract
     await bankContract.write.mints([playersSmartAccount, 1500]);
   }
 
-  async mintToBank(numberOfPlayers: number, bankContractAddress: string) {
-    const gameToken: string = '0x4A30f459F694876A5c6b726995274076dcD21E67';
+  async getBankProperties(bankContractAddress: string) {
+    const bankContract =
+      this.ethersService.getBankContractInstance(bankContractAddress);
 
-    const gameTokenContract =
-      this.viemService.getGameTokenContractInstance(gameToken);
+    const bankProperties: any[] = [];
 
-    await gameTokenContract.write.mint([numberOfPlayers, bankContractAddress]);
+    for (let i = 1; i < 41; i++) {
+      const bankProperty: any = (await bankContract.getProperty.staticCall(
+        i,
+      )) as [string, string, number, number, string, number, number, number];
+
+      const result = {
+        name: ethers.toUtf8String(bankProperty.name),
+        uri: ethers.hexlify(bankProperty.uri),
+        buyAmount: Number(BigInt(bankProperty.buyAmount)),
+        rentAmount: Number(BigInt(bankProperty.rentAmount)),
+        owner: bankProperty.owner,
+        noOfUpgrades: Number(BigInt(bankProperty.noOfUpgrades)),
+        propertyType: Number(bankProperty.propertyType as PropertyType),
+        propertyColor: Number(bankProperty.propertyColor as PropertyColors),
+      };
+      console.log(bankProperty);
+      console.log('buy amount ::: ', BigInt(bankProperty.buyAmount));
+      bankProperties.push(result);
+    }
+
+    return bankProperties;
   }
 }

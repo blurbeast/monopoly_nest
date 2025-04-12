@@ -38,4 +38,14 @@ export class EthersMService {
 
     return f.target as string;
   };
+
+  getBankContractInstance = (contractAddress: string) => {
+    const providerUrl = this.configService.get<string>('PROVIDER_URL');
+    // // get the pk
+    const pk = this.configService.get<string>('WALLET_KEY');
+    const provider = new ethers.JsonRpcProvider(providerUrl);
+
+    const wallet = new ethers.Wallet(pk as string, provider);
+    return new ethers.Contract(contractAddress, BankContract.abi, wallet);
+  };
 }
