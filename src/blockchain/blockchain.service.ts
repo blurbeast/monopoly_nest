@@ -3,18 +3,13 @@ import { ViemService } from '../viemM/viem.service';
 // import { encodeFunctionData, parseAbi } from 'viem';
 import { ConfigService } from '@nestjs/config';
 import { EthersMService } from '../ethers-m/ethers-m.service';
-import {
-  ByteArray,
-  bytesToString,
-  EncodeFunctionDataReturnType,
-  Hex,
-} from 'viem';
+import { EncodeFunctionDataReturnType } from 'viem';
 import {
   BankProperty,
   PropertyColors,
   PropertyType,
 } from '../game/dto/BankProperty';
-import { BytesLike, ethers, randomBytes } from 'ethers';
+import { ethers } from 'ethers';
 // import { EncodeFunctionDataReturnType } from 'viem/utils/abi/encodeFunctionData';
 
 @Injectable()
@@ -98,25 +93,31 @@ export class BlockchainService {
     const bankContract =
       this.ethersService.getBankContractInstance(bankContractAddress);
 
-    const bankProperties: any[] = [];
+    const bankProperties: BankProperty[] = [];
 
     for (let i = 1; i < 41; i++) {
       const bankProperty: any = (await bankContract.getProperty.staticCall(
         i,
       )) as [string, string, number, number, string, number, number, number];
 
-      const result = {
+      const result: BankProperty = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         name: ethers.toUtf8String(bankProperty.name),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         uri: ethers.hexlify(bankProperty.uri),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         buyAmount: Number(BigInt(bankProperty.buyAmount)),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         rentAmount: Number(BigInt(bankProperty.rentAmount)),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access,@typescript-eslint/no-unsafe-assignment
         owner: bankProperty.owner,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         noOfUpgrades: Number(BigInt(bankProperty.noOfUpgrades)),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         propertyType: Number(bankProperty.propertyType as PropertyType),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         propertyColor: Number(bankProperty.propertyColor as PropertyColors),
       };
-      console.log(bankProperty);
-      console.log('buy amount ::: ', BigInt(bankProperty.buyAmount));
       bankProperties.push(result);
     }
 

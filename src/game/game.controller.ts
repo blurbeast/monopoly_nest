@@ -1,4 +1,7 @@
 import { Controller } from '@nestjs/common';
 
 @Controller('game')
-export class GameController {}
+export class GameController {
+
+  // creta
+}

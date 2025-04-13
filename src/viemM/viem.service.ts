@@ -11,7 +11,7 @@ import {
   http,
 } from 'viem';
 import { entryPoint07Address } from 'viem/account-abstraction';
-import { toEcdsaKernelSmartAccount } from 'permissionless/accounts';
+import { toSimpleSmartAccount } from 'permissionless/accounts';
 import { sepolia } from 'viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { createSmartAccountClient } from 'permissionless';
@@ -46,9 +46,9 @@ export class ViemService {
   });
 
   public account = async (userId: number) => {
-    return toEcdsaKernelSmartAccount({
+    return toSimpleSmartAccount({
       client: this.publicClient,
-      owners: [privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex)],
+      owner: privateKeyToAccount(('0x' + process.env.WALLET_KEY) as Hex),
       entryPoint: {
         address: entryPoint07Address,
         version: '0.7',
