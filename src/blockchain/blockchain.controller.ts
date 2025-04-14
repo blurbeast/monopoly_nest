@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { BlockchainService } from './blockchain.service';
 // import { Hex } from 'viem';
 
@@ -6,15 +6,13 @@ import { BlockchainService } from './blockchain.service';
 export class BlockchainController {
   constructor(private readonly blockchainService: BlockchainService) {}
 
-  @Get('properties')
-  async getProperties() {
-    return await this.blockchainService.getBankProperties(
-      '0x272D75aC429D2C46a9fa71CEb9436F7d71E286e8',
-    );
+  @Get('properties/:bankContract')
+  async getProperties(@Param('bankContract') bankContract: string) {
+    return await this.blockchainService.getBankProperties(bankContract);
   }
 
-  @Get('deploy')
-  async deployBankContract() {
-    return await this.blockchainService.deployBankContract(5);
-  }
+  // @Get('deploy')
+  // async deployBankContract() {
+  //   return await this.blockchainService.deployBankContract(5);
+  // }
 }

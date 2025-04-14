@@ -1,20 +1,14 @@
 import { IsString } from 'class-validator';
+import { Expose } from 'class-transformer';
 
 export class CreatePlayerResponseDto {
-  constructor(
-    username: string,
-    playerAddress: string,
-    smartAccountAddress: string,
-  ) {
-    this.username = username;
-    this.playerAddress = playerAddress;
-    this.smartAccountAddress = smartAccountAddress;
-  }
-
   @IsString()
+  @Expose()
   username!: string;
   @IsString()
+  @Expose()
   playerAddress!: string;
   @IsString()
+  @Expose()
   smartAccountAddress!: string;
 }

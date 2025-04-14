@@ -7,6 +7,7 @@ import { CreatePlayerDto } from './dtos/CreatePlayer.dto';
 import { CreatePlayerResponseDto } from './dtos/CreatePlayerResponse.dto';
 import { plainToInstance } from 'class-transformer';
 import { Salted } from './salted.entity';
+import { PlayerResponse } from './dtos/PlayerResponse';
 
 // import { plainToInstance } from 'class-transformer';
 
@@ -56,20 +57,35 @@ export class PlayerService {
   async createPlayer(
     createPlayerDto: CreatePlayerDto,
   ): Promise<CreatePlayerResponseDto> {
+    console.log('createPlayerDto', createPlayerDto);
     try {
       //checking if blockchain service exist
-      console.log('block chain service :::', this.blockchainService);
       const salt = await this.getSaltedValue();
 
-      const foundPlayer = await this.playerRepository.findOne({
-        where: [
-          { username: createPlayerDto.username.toLowerCase() },
-          { playerAddress: createPlayerDto.playerAddress },
-        ],
-      });
+      // const foundPlayer = await this.playerRepository.findOne({
+      //   where: [
+      //     { username: createPlayerDto.username.toLowerCase() },
+      //     { playerAddress: createPlayerDto.playerAddress },
+      //   ],
+      // });
 
-      if (foundPlayer) {
+      const usernamePlayer: Player | null = await this.getEitherPlayerOrNull(
+        'username',
+        createPlayerDto.username.toLowerCase(),
+      );
+
+      if (usernamePlayer) {
         throw new Error(`Player ${createPlayerDto.username} already exist`);
+      }
+
+      const addressPlayer: Player | null = await this.getEitherPlayerOrNull(
+        '',
+        createPlayerDto.playerAddress,
+      );
+      if (addressPlayer) {
+        throw new Error(
+          `Player ${createPlayerDto.playerAddress} already exist`,
+        );
       }
       // always convert username to lowercase
       createPlayerDto.username = createPlayerDto.username.toLowerCase();
@@ -114,10 +130,8 @@ export class PlayerService {
   }
 
   private createPlayerResponse = (player: Player): CreatePlayerResponseDto => {
-    return plainToInstance(CreatePlayerResponseDto, {
-      username: player.username,
-      playerAddress: player.playerAddress,
-      smartAccountAddress: player.smartAccountAddress,
+    return plainToInstance(CreatePlayerResponseDto, player, {
+      excludeExtraneousValues: true,
     });
   };
 
@@ -132,26 +146,47 @@ export class PlayerService {
   };
 
   // expose the api for this
-  async getPlayerWithUsername(username: string): Promise<Player> {
-    return this.getPlayer('username', username);
+  async getPlayerWithUsername(username: string): Promise<PlayerResponse> {
+    const foundPlayer: Player = await this.getPlayer('username', username);
+    return this.returnPlayerResponse(foundPlayer);
   }
 
-  private async getPlayer(action: string, value: string): Promise<Player> {
-    const player: Player | null =
-      action === 'username'
-        ? await this.playerRepository.findOne({
-            where: { username: value },
-          })
-        : await this.playerRepository.findOne({
-            where: { playerAddress: value },
-          });
+  async getEitherPlayerOrNull(
+    action: string,
+    value: string,
+  ): Promise<Player | null> {
+    return action === 'username'
+      ? await this.playerRepository.findOne({
+          where: { username: value },
+        })
+      : await this.playerRepository.findOne({
+          where: { playerAddress: value },
+        });
+  }
 
+  async getPlayer(action: string, value: string): Promise<Player> {
+    const player: Player | null = await this.getEitherPlayerOrNull(
+      action,
+      value,
+    );
     if (!player) throw new Error(`Player with ${action} ${value} not found`);
     return player;
   }
 
+  private returnPlayerResponse = (player: Player): PlayerResponse => {
+    return plainToInstance(PlayerResponse, player, {
+      excludeExtraneousValues: true,
+    });
+  };
+
   // expose the api for this
-  async getPlayerWithPlayerAddress(playerAddress: string): Promise<Player> {
-    return this.getPlayer('playerAddress', playerAddress);
+  async getPlayerWithPlayerAddress(
+    playerAddress: string,
+  ): Promise<PlayerResponse> {
+    const foundPlayer: Player = await this.getPlayer(
+      'playerAddress',
+      playerAddress,
+    );
+    return this.returnPlayerResponse(foundPlayer);
   }
 }

@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Player } from '../player/player.entity';
 import { encodeFunctionData, getAddress, parseAbi } from 'viem';
 import { ConfigService } from '@nestjs/config';
+import { GameResponse } from './dto/GameResponse';
 
 @Injectable()
 export class GameService {
@@ -24,8 +25,10 @@ export class GameService {
     numberOfPlayer: number,
   ): Promise<string> => {
     // find the player
-    const foundPlayer =
-      await this.playerService.getPlayerWithPlayerAddress(userAddress);
+    const foundPlayer = await this.playerService.getPlayer(
+      'playerAddress',
+      userAddress,
+    );
 
     console.log(foundPlayer);
 
@@ -75,8 +78,10 @@ export class GameService {
     const game = await this.getGame(gameRoomId);
 
     // find player too
-    const player =
-      await this.playerService.getPlayerWithPlayerAddress(userAddress);
+    const player = await this.playerService.getPlayer(
+      'playerAddress',
+      userAddress,
+    );
 
     if (game.hasStarted) {
       throw new Error('cannot join already started game');
@@ -218,7 +223,6 @@ export class GameService {
   getGameBankProperties = async (gameRoomId: string) => {
     const game: Game = await this.getGame(gameRoomId);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return await this.blockchainService.getBankProperties(
       game.bankContractAddress,
     );
@@ -231,8 +235,10 @@ export class GameService {
       throw new Error('game is not active');
     }
 
-    const player: Player =
-      await this.playerService.getPlayerWithPlayerAddress(playerAddress);
+    const player: Player = await this.playerService.getPlayer(
+      'playerAddress',
+      playerAddress,
+    );
 
     // call on the blockchain service to perform action via AA
 
@@ -280,10 +286,15 @@ export class GameService {
       'https://www.random.org/strings/?num=1&len=5&digits=on&upperalpha=on&loweralpha=on&unique=on&format=plain&rnd=new',
     );
 
-    const result = JSON.stringify(response.data).slice(1, 6).trim();
-
-    console.log('generated randomness ::: ', result);
-
-    return result;
+    return JSON.stringify(response.data).slice(1, 6).trim();
   }
+
+  getGameResponse = async (gameId: string): Promise<GameResponse> => {
+    const game: Game = await this.getGame(gameId);
+    const response: GameResponse = plainToInstance(GameResponse, game, {
+      excludeExtraneousValues: true,
+    });
+    console.log('game response', response);
+    return response;
+  };
 }

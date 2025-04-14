@@ -8,6 +8,9 @@ import { GameModule } from './game/game.module';
 import { ViemModule } from './viemM/viem.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EthersMModule } from './ethers-m/ethers-m.module';
+import { Game } from './game/game.entity';
+import { Player } from './player/player.entity';
+import { Salted } from './player/salted.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,7 +27,7 @@ import { EthersMModule } from './ethers-m/ethers-m.module';
           username: configService.get<string>('DB_USERNAME'),
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_DATABASE'),
-          entities: [__dirname + '/**/*.entity{.ts, .js}'],
+          entities: [Game, Player, Salted],
           synchronize: true,
         };
       },

@@ -9,6 +9,7 @@ import { ViemService } from '../viemM/viem.service';
 import { EthersMService } from '../ethers-m/ethers-m.service';
 import { Player } from '../player/player.entity';
 import { Salted } from '../player/salted.entity';
+import { PlayerResponse } from '../player/dtos/PlayerResponse';
 
 describe('GameService', () => {
   let service: GameService;
@@ -94,7 +95,7 @@ describe('GameService', () => {
     expect(foundGame.status).toBe(GameStatus.PENDING);
     expect(foundGame.hasStarted).toBeFalsy();
 
-    const foundPlayer: Player =
+    const foundPlayer: PlayerResponse =
       await playerService.getPlayerWithPlayerAddress(playerAddress);
 
     expect(foundPlayer.currentGameId).toBe(foundGame?.gameRoomId);

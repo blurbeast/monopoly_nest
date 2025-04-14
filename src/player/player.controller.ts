@@ -1,10 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseFilters } from '@nestjs/common';
 import { CreatePlayerResponseDto } from './dtos/CreatePlayerResponse.dto';
 import { CreatePlayerDto } from './dtos/CreatePlayer.dto';
 import { PlayerService } from './player.service';
-import { Player } from './player.entity';
+import { PlayerResponse } from './dtos/PlayerResponse';
+import { AllExceptionsFilter } from '../all_exception';
 
 @Controller('player')
+@UseFilters(AllExceptionsFilter)
 export class PlayerController {
   constructor(private readonly playerService: PlayerService) {}
   @Post()
@@ -14,17 +16,17 @@ export class PlayerController {
     return await this.playerService.createPlayer(createPlayerDto);
   }
 
-  @Get(':username')
+  @Get('username/:username')
   async getPlayerByUsername(
     @Param('username') username: string,
-  ): Promise<Player> {
+  ): Promise<PlayerResponse> {
     return await this.playerService.getPlayerWithUsername(username);
   }
 
-  @Get(':playerAddress')
+  @Get('address/:playerAddress')
   async getPlayerByPlayerAddress(
     @Param('playerAddress') playerAddress: string,
-  ): Promise<Player> {
+  ): Promise<PlayerResponse> {
     return await this.playerService.getPlayerWithPlayerAddress(playerAddress);
   }
 }
