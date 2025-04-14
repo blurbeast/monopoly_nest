@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, UseFilters } from '@nestjs/common';
 import { GameService } from './game.service';
+import { AllExceptionsFilter } from '../all_exception';
 
 @Controller('game')
+@UseFilters(AllExceptionsFilter)
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
