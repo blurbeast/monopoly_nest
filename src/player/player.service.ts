@@ -189,4 +189,12 @@ export class PlayerService {
     );
     return this.returnPlayerResponse(foundPlayer);
   }
+
+  async informPlayerAvailableUsername(username: string): Promise<boolean> {
+    const player: Player | null = await this.getEitherPlayerOrNull(
+      'username',
+      username,
+    );
+    return !!player;
+  }
 }

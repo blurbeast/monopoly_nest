@@ -29,4 +29,9 @@ export class PlayerController {
   ): Promise<PlayerResponse> {
     return await this.playerService.getPlayerWithPlayerAddress(playerAddress);
   }
+
+  @Get('available/:username')
+  async informPlayersAvailableUsername(username: string): Promise<boolean> {
+    return this.playerService.informPlayerAvailableUsername(username);
+  }
 }
